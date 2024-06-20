@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "624206746222",
+    "project_id": "diat-8291a",
+    "storage_bucket": "diat-8291a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624206746222:android:c29e13b16233bd49780c7f",
+        "android_client_info": {
+          "package_name": "com.chinmay.diat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoE6_g8XHj1LNoi6pIF6MAJsk3dY5sLhA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
