@@ -56,7 +56,7 @@ public class Home extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
 
-        // Getting the view of the Drawer from navigation view
+        // Getting the view of the Drawer from navigation view.
         headerView = navigationView.getHeaderView(0);
 
         addept.setOnClickListener(new View.OnClickListener() {
