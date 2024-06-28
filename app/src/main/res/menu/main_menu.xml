@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/home"
+            android:icon="@drawable/home_logo"
+            android:title="Home"
+            />
+
+        <item android:id="@+id/document_upload"
+            android:icon="@drawable/document_upload"
+            android:title="Document Upload"
+            />
+
+        <item android:id="@+id/document_update"
+            android:icon="@drawable/document_edit_logo"
+            android:title="Document Update"
+            />
+
+        <item android:id="@+id/add_aachievement"
+            android:icon="@drawable/document_upload"
+            android:title="Add Achievement"
+            />
+
+        <item android:id="@+id/template"
+            android:icon="@drawable/template_logo"
+            android:title="Templates"
+            />
+
+        <item android:id="@+id/add_achievement"
+            android:icon="@drawable/achievement_logo"
+            android:title="Add Achievement"
+            />
+    </group>
+</menu>

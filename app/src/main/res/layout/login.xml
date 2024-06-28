@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_A700"
     android:orientation="vertical"
     tools:context=".Login">
 
@@ -45,7 +45,7 @@
                         android:layout_marginTop="10dp"
                         android:gravity="center"
                         android:text="Welcome"
-                        android:textColor="@color/white"
+                        android:textColor="@color/white_A700"
                         android:textSize="30dp"
                         android:textStyle="bold" />
 
@@ -138,7 +138,7 @@
                             android:text="Login"
                             android:gravity="center"
                             android:textAllCaps="false"
-                            android:textColor="@color/white"
+                            android:textColor="@color/white_A700"
                             android:textSize="15dp" />
 
                     </LinearLayout>
@@ -188,34 +188,7 @@
                         android:layout_marginTop="10dp"
                         app:cardBackgroundColor="@color/cardcolour"
                         app:cardCornerRadius="10dp"
-                        app:cardElevation="20dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="3dp">
-
-                            <ImageView
-                                android:id="@+id/googleloginimg"
-                                android:layout_width="70dp"
-                                android:layout_height="48dp"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/google_icon"/>
-
-                            <TextView
-                                android:id="@+id/textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toEndOf="@id/googleloginimg"
-                                android:paddingRight="5dp"
-                                android:text="Sign in with Google"
-                                android:textColor="@color/black" />
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
+                        app:cardElevation="20dp"/>
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/facebooklogincard"
@@ -239,7 +212,7 @@
                                 android:layout_height="48dp"
                                 android:layout_alignParentStart="true"
                                 android:layout_centerVertical="true"
-                                android:src="@drawable/fb_icon" />
+                                android:src="@drawable/person_logo" />
 
                             <TextView
                                 android:id="@+id/fblogintext"
@@ -248,7 +221,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_toEndOf="@id/fbloginimg"
                                 android:paddingRight="10dp"
-                                android:text="Sign in with Google"
+                                android:text="Login As Guest"
                                 android:textColor="@color/black" />
 
                         </RelativeLayout>

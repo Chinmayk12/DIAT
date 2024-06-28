@@ -38,6 +38,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth") // For firebase Auth
     implementation("com.google.android.gms:play-services-auth:21.2.0")  // Google Play services library
     implementation ("com.google.android.material:material:1.5.0") // Matrial UI Design
+    implementation("de.hdodenhof:circleimageview:3.1.0")     // For Circular Image
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

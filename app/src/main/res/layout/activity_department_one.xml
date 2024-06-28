@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+    <data/>
+    <FrameLayout android:id="@+id/frameStacksearch"
+        android:layout_height="match_parent" android:layout_width="match_parent">
+        <LinearLayout android:id="@+id/linearDepartmentone"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_17pxv"
+            android:paddingEnd="@dimen/_14pxh"
+            android:paddingStart="@dimen/_14pxh"
+            android:paddingTop="@dimen/_17pxv" style="@style/groupStyleblue_100">
+            <LinearLayout android:gravity="center_vertical"
+                android:id="@+id/linearRowsearch"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_10pxh"
+                android:layout_width="match_parent" android:orientation="horizontal">
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchViewSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2pxv"
+                    android:background="@drawable/rectangle_bg_gray_900_radius_22"
+                    android:gravity="top"
+                    app:iconifiedByDefault="false"
+                    app:queryBackground="@android:color/transparent"
+                    app:queryHint="Search"
+                    app:searchIcon="@drawable/img_rewind" />
+
+                <ImageButton android:id="@+id/btnProfileiconOne"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="@dimen/_46pxh"
+                    android:layout_marginStart="@dimen/_15pxh"
+                    android:layout_width="@dimen/_46pxh"
+                    android:scaleType="fitCenter" tools:ignore="ContentDescription"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingBtnFloatingactionb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/_56pxv"
+            android:layout_marginEnd="@dimen/_39pxh"
+            android:backgroundTint="@color/blue_700"
+            app:fabCustomSize="@dimen/_66pxh"
+            app:srcCompat="@drawable/img_plus"
+            app:tint="@color/gray_900"/>
+    </FrameLayout>
+</layout>
