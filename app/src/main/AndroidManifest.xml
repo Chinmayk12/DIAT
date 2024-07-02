@@ -13,6 +13,9 @@
         android:theme="@style/Theme.DIAT"
         tools:targetApi="31">
         <activity
+            android:name=".Administration"
+            android:exported="false" />
+        <activity
             android:name=".Robotics_dept"
             android:exported="false" />
         <activity

@@ -5,147 +5,233 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BBE1FA"
+    android:background="@color/app_background1"
     tools:context=".Home">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/navbar"
+        <LinearLayout
+            android:id="@+id/navbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/searchViewSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal">
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/rectangle_bg_gray_900_radius_22"
+                android:drawableStart="@drawable/img_rewind"
+                android:drawablePadding="10dp"
+                android:gravity="top"
+                android:hint="Find Department"
+                android:padding="10dp"
+                android:textColor="@color/white_A700"
+                android:textColorHint="@color/white_A700" />
 
-                <EditText
-                    android:id="@+id/searchViewSearch"
+            <FrameLayout
+                android:layout_width="@dimen/_46pxh"
+                android:layout_height="@dimen/_46pxh"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:layout_marginStart="@dimen/_15pxh">
+
+                <ImageButton
+                    android:id="@+id/btnProfileiconOne"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="10dp"
-                    android:layout_margin="10dp"
-                    android:drawableStart="@drawable/img_rewind"
-                    android:background="@drawable/rectangle_bg_gray_900_radius_22"
-                    android:gravity="top"
-                    android:hint="Find Department"
-                    android:textColor="@color/white_A700"
-                    android:drawablePadding="10dp"
-                    android:textColorHint="@color/white_A700" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/circular_bg"
+                    android:scaleType="fitCenter"
+                    tools:ignore="ContentDescription" />
 
-                <FrameLayout
-                    android:layout_gravity="center_vertical"
-                    android:layout_height="@dimen/_46pxh"
-                    android:layout_width="@dimen/_46pxh"
-                    android:layout_marginStart="@dimen/_15pxh"
-                    android:layout_margin="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="AB"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
 
-                    <ImageButton
-                        android:id="@+id/btnProfileiconOne"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/circular_bg"
-                        android:scaleType="fitCenter"
-                        tools:ignore="ContentDescription"/>
+        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="AB"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-                </FrameLayout>
-
-            </LinearLayout>
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/navbar">
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/navbar"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
-                        app:cardCornerRadius="30dp"
-                        app:cardBackgroundColor="#0F4C75"
-                        >
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#FFFF"
+                        app:cardCornerRadius="30dp">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
                             <ImageView
-                                android:id="@+id/ai_branch"
+                                android:id="@+id/administration"
                                 android:layout_width="match_parent"
-                                android:layout_height="180dp"
-                                android:paddingBottom="30dp"
+                                android:layout_height="150dp"
                                 android:layout_alignParentTop="true"
-                                android:src="@drawable/ai_logo"
-                                />
+                                android:layout_margin="20dp"
+                                android:src="@drawable/administration_logo" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
-                                android:text="AI"
-                                android:textColor="@color/white_A700"
-                                android:fontFamily="@font/interbold"
-                                android:textSize="25sp"
                                 android:layout_gravity="bottom|center"
+                                android:layout_marginBottom="5dp"
+                                android:fontFamily="@font/interbold"
+                                android:text="Administration"
+                                android:textColor="@color/black"
+                                android:textSize="13sp" />
+
+                        </RelativeLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        app:cardCornerRadius="30dp">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/research"
+                                android:layout_width="match_parent"
+                                android:layout_height="220dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_margin="20dp"
+                                android:src="@drawable/research_logo" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="bottom|center"
+                                android:fontFamily="@font/interbold"
+                                android:text="Research  "
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:layout_marginBottom="5dp"
                                 />
 
                         </RelativeLayout>
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        app:cardCornerRadius="30dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/faculty"
+                                android:layout_width="match_parent"
+                                android:layout_height="220dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_margin="20dp"
+                                android:src="@drawable/faculty" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="bottom|center"
+                                android:fontFamily="@font/interbold"
+                                android:text="Faculty"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:layout_marginBottom="5dp"
+                                />
+
+                        </RelativeLayout>
+
 
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
-                        app:cardBackgroundColor="#0F4C75"
+                        android:layout_weight="1"
                         app:cardCornerRadius="30dp">
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
                             <ImageView
-                                android:id="@+id/cs_branch"
+                                android:id="@+id/students"
                                 android:layout_width="match_parent"
                                 android:layout_height="220dp"
-                                android:paddingBottom="30dp"
                                 android:layout_alignParentTop="true"
-                                android:src="@drawable/cs_logo"
-                                />
+                                android:layout_margin="20dp"
+                                android:src="@drawable/students" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
-                                android:text="CS"
-                                android:textColor="@color/white_A700"
-                                android:fontFamily="@font/interbold"
-                                android:textSize="25sp"
                                 android:layout_gravity="bottom|center"
+                                android:fontFamily="@font/interbold"
+                                android:text="Students"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:layout_marginBottom="5dp"
                                 />
 
                         </RelativeLayout>
-
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
@@ -153,29 +239,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
-                        app:cardCornerRadius="30dp"
-                        app:cardBackgroundColor="#0F4C75"
-                        >
+                        android:layout_weight="1"
+                        app:cardCornerRadius="30dp">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
                             <ImageView
-                                android:id="@+id/mech_branch"
+                                android:id="@+id/nondiatstudents"
                                 android:layout_width="match_parent"
-                                android:layout_height="220dp"
-                                android:paddingBottom="30dp"
+                                android:layout_height="200dp"
                                 android:layout_alignParentTop="true"
-                                android:src="@drawable/mech_logo"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="20dp"
+                                android:src="@drawable/others_students"
+                                android:textSize="15sp"
+                                android:layout_marginBottom="7dp"
                                 />
 
                             <TextView
@@ -183,11 +270,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
-                                android:text="Mech"
-                                android:textColor="@color/white_A700"
-                                android:fontFamily="@font/interbold"
-                                android:textSize="25sp"
                                 android:layout_gravity="bottom|center"
+                                android:fontFamily="@font/interbold"
+                                android:text="Non DIAT \nStudents"
+                                android:textColor="@color/black"
+                                android:textSize="12sp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
                                 />
 
                         </RelativeLayout>
@@ -198,9 +287,8 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
-                        app:cardBackgroundColor="#0F4C75"
+                        android:layout_weight="1"
                         app:cardCornerRadius="30dp">
 
                         <RelativeLayout
@@ -208,24 +296,24 @@
                             android:layout_height="match_parent">
 
                             <ImageView
-                                android:id="@+id/robo_branch"
+                                android:id="@+id/reimbursement"
                                 android:layout_width="match_parent"
                                 android:layout_height="220dp"
-                                android:paddingBottom="30dp"
                                 android:layout_alignParentTop="true"
-                                android:src="@drawable/robot_logo"
-                                />
+                                android:layout_margin="20dp"
+                                android:src="@drawable/reimbursement_logo" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
-                                android:text="Robotics"
-                                android:textColor="@color/white_A700"
-                                android:fontFamily="@font/interbold"
-                                android:textSize="25sp"
                                 android:layout_gravity="bottom|center"
+                                android:fontFamily="@font/interbold"
+                                android:text="Reimbursement"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                android:layout_marginBottom="5dp"
                                 />
 
                         </RelativeLayout>
@@ -234,30 +322,16 @@
 
 
             </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/adddeptbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="50dp"
-            android:layout_marginRight="30dp"
-            android:backgroundTint="@color/blue_700"
-            app:fabCustomSize="@dimen/_66pxh"
-            app:srcCompat="@drawable/img_plus"
-            app:tint="@color/gray_900"/>
+        </ScrollView>
 
     </RelativeLayout>
-
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="start"
         app:headerLayout="@layout/header"
-        app:menu="@menu/main_menu"
-        android:layout_gravity="start"/>
-
+        app:menu="@menu/main_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

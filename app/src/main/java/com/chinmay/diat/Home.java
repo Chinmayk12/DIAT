@@ -3,18 +3,29 @@ package com.chinmay.diat;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,9 +43,14 @@ public class Home extends AppCompatActivity {
     FloatingActionButton addept;
     AppCompatButton savedept;
 
+    EditText searchEditText;
+    ScrollView scrollView;
+    LinearLayout linearLayout;
     ImageView aidept;
     EditText deptname;
     View headerView;
+
+    ImageView administration;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +61,12 @@ public class Home extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        //Instances
-        addept = (FloatingActionButton) findViewById(R.id.adddeptbutton);
-        //deptname = (EditText) findViewById(R.id.dialogDeptEditText);
-        aidept = (ImageView) findViewById(R.id.ai_branch);
-
-        //savedept = (AppCompatButton) findViewById(R.id.addDeptButton);
+        deptname = (EditText) findViewById(R.id.dialogDeptEditText);
+        administration = (ImageView) findViewById(R.id.administration);
+        savedept = (AppCompatButton) findViewById(R.id.addDeptButton);
+        searchEditText = findViewById(R.id.searchViewSearch);
+        scrollView = findViewById(R.id.scrollView);
+        linearLayout = findViewById(R.id.linearLayout);
 
         // For Left Side Drawer (Slide Bar)
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -59,45 +75,18 @@ public class Home extends AppCompatActivity {
         // Getting the view of the Drawer from navigation view.
         headerView = navigationView.getHeaderView(0);
 
-        addept.setOnClickListener(new View.OnClickListener() {
+        administration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCustomDialog();
+                startActivity(new Intent(getApplicationContext(),Administration.class));
             }
         });
-        aidept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AI_dept.class));
-            }
-        });
-
-        findViewById(R.id.cs_branch).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),computer_dept.class));
-            }
-        });
-
-        findViewById(R.id.mech_branch).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Mech_dept.class));
-            }
-        });
-
-        findViewById(R.id.robo_branch).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Robotics_dept.class));
-            }
-        });
-
     }
 
     private void showCustomDialog() {
         // Create a new dialog
         Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         // Inflate the custom layout
         LayoutInflater inflater = getLayoutInflater();
