@@ -34,11 +34,13 @@ android {
 
 dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.3") //Firestore Firebase
+    implementation ("com.google.android.material:material:1.5.0")   // Matrial UI Design
     implementation(platform("com.google.firebase:firebase-bom:33.1.0")) // Import the BoM for the Firebase platform
     implementation("com.google.firebase:firebase-auth") // For firebase Auth
     implementation("com.google.android.gms:play-services-auth:21.2.0")  // Google Play services library
     implementation ("com.google.android.material:material:1.5.0") // Matrial UI Design
     implementation("de.hdodenhof:circleimageview:3.1.0")     // For Circular Image
+    implementation("com.google.firebase:firebase-storage")  // Cloud Storage
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

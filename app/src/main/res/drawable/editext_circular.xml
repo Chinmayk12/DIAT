@@ -1,5 +1,5 @@
 <!-- res/drawable/circular_bg.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#BBE1FA"/>
+    <solid android:color="@color/app_input"/>
     <corners android:radius="23dp"/>
 </shape>

@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,6 @@ public class Home extends AppCompatActivity {
     ImageView aidept;
     EditText deptname;
     View headerView;
-
     ImageView administration;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -81,37 +81,6 @@ public class Home extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),Administration.class));
             }
         });
-    }
-
-    private void showCustomDialog() {
-        // Create a new dialog
-        Dialog dialog = new Dialog(this);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        // Inflate the custom layout
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogLayout = inflater.inflate(R.layout.add_dept_dialog, null);
-
-        // Set the custom layout as the dialog's content
-        dialog.setContentView(dialogLayout);
-
-        //EditText editText = dialogLayout.findViewById(R.id.dialogDeptEditText);
-        //AppCompatButton button = dialogLayout.findViewById(R.id.addDeptButton);
-
-        // Set up the button click listener
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle the button click
-                String inputText = editText.getText().toString();
-                Toast.makeText(getApplicationContext(),inputText,Toast.LENGTH_SHORT).show();
-                // Optionally dismiss the dialog
-                dialog.dismiss();
-            }
-        });
-*/
-        // Show the dialog
-        dialog.show();
     }
 
     public void openDrawer(View view)

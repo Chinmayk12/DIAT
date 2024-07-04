@@ -82,247 +82,99 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="10dp"
+                        android:layout_margin="0dp"
                         android:orientation="horizontal">
 
-                        <androidx.cardview.widget.CardView
+                        <RelativeLayout
+                            android:id="@+id/relativeLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_margin="10dp"
-                            android:layout_weight="1"
-                            app:cardBackgroundColor="#FFFF"
-                            app:cardCornerRadius="30dp">
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
 
-                            <RelativeLayout
+                            <ImageView
+                                android:id="@+id/ai_branch"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="150dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_margin="20dp"
+                                android:src="@drawable/folder_icon" />
 
-                                <ImageView
-                                    android:id="@+id/ai_branch"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="150dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_margin="20dp"
-                                    android:src="@drawable/folder_icon" />
+                            <ImageButton
+                                android:id="@+id/more_option"
+                                android:layout_width="30dp"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="30dp"
+                                android:background="@color/app_background1"
+                                android:layout_alignParentRight="true"
+                                android:src="@drawable/more_logo"/>
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_gravity="bottom|center"
-                                    android:layout_marginBottom="5dp"
-                                    android:fontFamily="@font/interbold"
-                                    android:text="Administration"
-                                    android:textColor="@color/black"
-                                    android:textSize="13sp" />
-
-                            </RelativeLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_margin="10dp"
-                            android:layout_weight="1"
-                            app:cardCornerRadius="30dp">
-
-                            <RelativeLayout
+                            <TextView
+                                android:id="@+id/fileName"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="bottom|center"
+                                android:layout_marginBottom="5dp"
+                                android:fontFamily="@font/interbold"
+                                android:text="Administration"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"/>
 
-                                <ImageView
-                                    android:id="@+id/m_branch"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="220dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_margin="20dp"
-                                    android:src="@drawable/folder_icon" />
+                        </RelativeLayout>
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_gravity="bottom|center"
-                                    android:layout_marginBottom="5dp"
-                                    android:fontFamily="@font/interbold"
-                                    android:text="Research  "
-                                    android:textColor="@color/black"
-                                    android:textSize="13sp" />
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
 
-                            </RelativeLayout>
+                            <ImageView
+                                android:id="@+id/m_branch"
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_margin="20dp"
+                                android:src="@drawable/folder_icon" />
 
+                            <ImageButton
+                                android:layout_width="30dp"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="30dp"
+                                android:background="@color/app_background1"
+                                android:layout_alignParentRight="true"
+                                android:src="@drawable/more_logo"/>
 
-                        </androidx.cardview.widget.CardView>
-
-
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="bottom|center"
+                                android:layout_marginBottom="5dp"
+                                android:fontFamily="@font/interbold"
+                                android:text="Research"
+                                android:textColor="@color/black"
+                                android:textSize="13sp" />
+                        </RelativeLayout>
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:orientation="horizontal">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_margin="10dp"
-                            android:layout_weight="1"
-                            app:cardCornerRadius="30dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <ImageView
-                                    android:id="@+id/mech_branch"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="220dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_margin="20dp"
-                                    android:src="@drawable/folder_icon" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_gravity="bottom|center"
-                                    android:layout_marginBottom="5dp"
-                                    android:fontFamily="@font/interbold"
-                                    android:text="Faculty"
-                                    android:textColor="@color/black"
-                                    android:textSize="13sp" />
-
-                            </RelativeLayout>
-
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_margin="10dp"
-                            android:layout_weight="1"
-                            app:cardCornerRadius="30dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <ImageView
-                                    android:id="@+id/robo_branch"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="220dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_margin="20dp"
-                                    android:src="@drawable/folder_icon" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_gravity="bottom|center"
-                                    android:layout_marginBottom="5dp"
-                                    android:fontFamily="@font/interbold"
-                                    android:text="Students"
-                                    android:textColor="@color/black"
-                                    android:textSize="13sp" />
-
-                            </RelativeLayout>
-                        </androidx.cardview.widget.CardView>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:orientation="horizontal">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_margin="10dp"
-                            android:layout_weight="1"
-                            app:cardCornerRadius="30dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <ImageView
-                                    android:id="@+id/m1_branch"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginRight="20dp"
-                                    android:layout_marginBottom="7dp"
-                                    android:src="@drawable/folder_icon"
-                                    android:textSize="15sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_gravity="bottom|center"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:fontFamily="@font/interbold"
-                                    android:text="Non DIAT \nStudents"
-                                    android:textColor="@color/black"
-                                    android:textSize="12sp" />
-
-                            </RelativeLayout>
-
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_margin="10dp"
-                            android:layout_weight="1"
-                            app:cardCornerRadius="30dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <ImageView
-                                    android:id="@+id/r1_branch"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="220dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_margin="20dp"
-                                    android:src="@drawable/folder_icon" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_gravity="bottom|center"
-                                    android:layout_marginBottom="5dp"
-                                    android:fontFamily="@font/interbold"
-                                    android:text="Reimbursement"
-                                    android:textColor="@color/black"
-                                    android:textSize="13sp" />
-
-                            </RelativeLayout>
-                        </androidx.cardview.widget.CardView>
-                    </LinearLayout>
-
-
                 </LinearLayout>
             </ScrollView>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingbutton"
+                android:backgroundTint="@color/blue_700"
+                android:layout_gravity="bottom|end"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/_56pxv"
+                android:layout_marginEnd="@dimen/_39pxh"
+                android:layout_width="wrap_content"
+                app:fabCustomSize="@dimen/_66pxh"
+                app:srcCompat="@drawable/img_plus"
+                app:tint="@color/gray_900"/>
 
         </RelativeLayout>
 
