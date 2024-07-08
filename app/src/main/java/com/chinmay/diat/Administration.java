@@ -115,7 +115,7 @@ public class Administration extends AppCompatActivity {
 
         // Inflate the custom layout
         LayoutInflater inflater = getLayoutInflater();
-        View dialogLayout = inflater.inflate(R.layout.add_dept_dialog, null);
+        View dialogLayout = inflater.inflate(R.layout.upload_file_dialog, null);
 
         // Set the custom layout as the dialog's content
         dialog.setContentView(dialogLayout);
@@ -138,11 +138,12 @@ public class Administration extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fileUri == null || fileNameTextView.getText().toString().trim().isEmpty()) {
+                String filename = filenameedittext.getText().toString().trim();
+                if (fileUri == null || filename.isEmpty()) {
                     Toast.makeText(Administration.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Proceed with uploading the file and saving the data
-                    uploadFileToFirebase(fileUri);
+                    uploadFileToFirebase(fileUri, filename);
                     dialog.dismiss();
                 }
             }
@@ -200,9 +201,9 @@ public class Administration extends AppCompatActivity {
         return result;
     }
 
-    private void uploadFileToFirebase(Uri fileUri) {
+    private void uploadFileToFirebase(Uri fileUri, String filename) {
         if (fileUri != null) {
-            StorageReference fileRef = storageReference.child("administration/" + getFileName(fileUri));
+            StorageReference fileRef = storageReference.child("administration/" + filename);
             fileRef.putFile(fileUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -213,7 +214,7 @@ public class Administration extends AppCompatActivity {
                                 public void onSuccess(Uri uri) {
                                     // You can use uri.toString() to access the file URL
                                     String downloadUrl = uri.toString();
-                                    saveFileLinkToFirestore(getFileName(fileUri), downloadUrl);
+                                    saveFileLinkToFirestore(filename, downloadUrl);
                                     // Here you can save the download URL to Firestore or perform other operations
                                     Toast.makeText(Administration.this, "File uploaded to storage", Toast.LENGTH_SHORT).show();
                                 }
