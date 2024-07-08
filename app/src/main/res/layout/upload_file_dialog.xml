@@ -18,7 +18,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
-                    android:text="Update Documents"
+                    android:text="Upload Documents"
                     android:fontFamily="@font/interbold"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
@@ -75,7 +75,7 @@
                     android:background="@drawable/button_circular"
                     android:padding="13dp"
                     android:gravity="center"
-                    android:text="Update Document"
+                    android:text="Upload Document"
                     android:textColor="#FFFFFF"
                     android:textAllCaps="false"
                     android:textSize="15sp" />

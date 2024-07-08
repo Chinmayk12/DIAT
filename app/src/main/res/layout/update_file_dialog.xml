@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/dilogbox_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/dialogDeptTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="Update Documents"
+            android:fontFamily="@font/interbold"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/dialogDeptEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/editext_circular"
+            android:drawableStart="@drawable/department_logo"
+            android:drawablePadding="10dp"
+            android:hint="Enter File Name"
+            android:inputType="text"
+            android:layout_gravity="center"
+            android:padding="20dp"
+            android:textColor="@color/black"
+            android:textColorHint="#878787"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/uploadFileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_circular"
+                android:padding="10dp"
+                android:text="Choose File"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/fileNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:text="No Image choosen"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addDeptButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_circular"
+            android:padding="13dp"
+            android:gravity="center"
+            android:text="Update Document"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:textSize="15sp" />
+    </LinearLayout>
+</RelativeLayout>

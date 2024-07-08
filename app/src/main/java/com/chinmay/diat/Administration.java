@@ -171,16 +171,14 @@ public class Administration extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_FILE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            fileUri = data.getData();
-
-            // Get the file name and display it in the TextView
-            String fileName = getFileName(fileUri);
-            fileNameTextView.setText(fileName);
-        }
+        fileUri = data.getData();
+        String fileName = getFileName(fileUri);
+        fileNameTextView.setText(fileName);
+        filesAdapter.handleActivityResult(requestCode, resultCode, data);
     }
+
 
     @SuppressLint("Range")
     private String getFileName(Uri uri) {

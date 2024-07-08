@@ -1,4 +1,6 @@
 package com.chinmay.diat;
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,11 +24,9 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,20 +34,19 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHolder> {
 
     private FirebaseStorage storage;
     private Context context;
     private List<FileModel> fileList;
     private FirebaseFirestore db;
-    private static final int PICK_FILE_REQUEST = 1;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int PICK_FILE_REQUEST = 2;
     private Uri fileUri;
     private TextView fileNameTextView;
     private EditText filenameedittext;
@@ -127,7 +126,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
 
         // Inflate the custom layout
         LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogLayout = inflater.inflate(R.layout.upload_file_dialog, null);
+        View dialogLayout = inflater.inflate(R.layout.update_file_dialog, null);
 
         // Set the custom layout as the dialog's content
         dialog.setContentView(dialogLayout);
@@ -181,8 +180,6 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
                 "application/vnd.openxmlformats-officedocument.presentationml.presentation" // .pptx
         });
         intent.setAction(Intent.ACTION_GET_CONTENT);
-
-        // Make sure to call startActivityForResult from an Activity or Fragment
         ((Activity) context).startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FILE_REQUEST);
     }
 
@@ -190,9 +187,14 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         if (requestCode == PICK_FILE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             fileUri = data.getData();
             String fileName = getFileName(fileUri);
-            fileNameTextView.setText(fileName);
+            if (fileNameTextView != null) {
+                fileNameTextView.setText(fileName);
+            } else {
+                Log.e("FilesAdapter", "fileNameTextView is null");
+            }
         }
     }
+
 
     @SuppressLint("Range")
     private String getFileName(Uri uri) {

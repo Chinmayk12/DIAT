@@ -41,6 +41,8 @@ dependencies {
     implementation ("com.google.android.material:material:1.5.0") // Matrial UI Design
     implementation("de.hdodenhof:circleimageview:3.1.0")     // For Circular Image
     implementation("com.google.firebase:firebase-storage")  // Cloud Storage
+    implementation ("androidx.activity:activity-ktx:1.4.0")
+    implementation ("androidx.fragment:fragment-ktx:1.4.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
