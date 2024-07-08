@@ -1,6 +1,6 @@
 package com.chinmay.diat;
+
 import android.annotation.SuppressLint;
-import androidx.documentfile.provider.DocumentFile;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,42 +10,51 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Administration extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private Uri imageUri;
+    private static final int PICK_FILE_REQUEST = 2;
+    private Uri fileUri;
     private TextView fileNameTextView;
-    EditText filenameedittext;
+    private EditText filenameedittext;
     private FirebaseStorage storage;
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
     private StorageReference storageReference;
+    private ImageView more_options;
+    private FloatingActionButton addfile;
 
-    ImageView more_options;
-    FloatingActionButton addfile;
+    private RecyclerView recyclerView;
+    private FilesAdapter filesAdapter;
+    private List<FileModel> fileList;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -60,14 +69,16 @@ public class Administration extends AppCompatActivity {
         storageReference = storage.getReference();
 
         // Instances
-        more_options = findViewById(R.id.more_option);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns in the grid
+        fileList = new ArrayList<>();
+        filesAdapter = new FilesAdapter(this, fileList);
+        recyclerView.setAdapter(filesAdapter);
+
+        // Fetch data from Firestore
+        fetchDocumentsFromFirestore();
+
         addfile = findViewById(R.id.floatingbutton);
-        more_options.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopupMenu(v);
-            }
-        });
 
         addfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,26 +88,24 @@ public class Administration extends AppCompatActivity {
         });
     }
 
-    private void showPopupMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-        popupMenu.getMenuInflater().inflate(R.menu.folder_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                int id = menuItem.getItemId();
-
-                if (id == R.id.menu_update) {
-                    Toast.makeText(view.getContext(), "Update", Toast.LENGTH_SHORT).show();
-                } else if (id == R.id.menu_delete) {
-                    Toast.makeText(view.getContext(), "Delete", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            }
-
-        });
-
-        popupMenu.show();
+    private void fetchDocumentsFromFirestore() {
+        db.collection("documents")
+                .document("administration")
+                .collection("files")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            return;
+                        }
+                        fileList.clear();
+                        for (QueryDocumentSnapshot document : value) {
+                            FileModel fileModel = document.toObject(FileModel.class);
+                            fileList.add(fileModel);
+                        }
+                        filesAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     private void showCustomDialog() {
@@ -129,11 +138,11 @@ public class Administration extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageUri == null || fileNameTextView.getText().toString().trim().isEmpty()) {
+                if (fileUri == null || fileNameTextView.getText().toString().trim().isEmpty()) {
                     Toast.makeText(Administration.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Proceed with uploading the file and saving the data
-                    uploadFileToFirebase(imageUri);
+                    uploadFileToFirebase(fileUri);
                     dialog.dismiss();
                 }
             }
@@ -145,31 +154,51 @@ public class Administration extends AppCompatActivity {
 
     private void openFileChooser() {
         Intent intent = new Intent();
-        intent.setType("image/*");
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+                "image/*",
+                "application/pdf",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+                "application/vnd.ms-excel",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+                "application/vnd.ms-powerpoint",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation" // .pptx
+        });
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, PICK_FILE_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            String fileName = getFileName(imageUri);
+        if (requestCode == PICK_FILE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            fileUri = data.getData();
+
+            // Get the file name and display it in the TextView
+            String fileName = getFileName(fileUri);
             fileNameTextView.setText(fileName);
         }
     }
 
     @SuppressLint("Range")
     private String getFileName(Uri uri) {
-        String filename = filenameedittext.getText().toString().trim();
-        if (filename != null) {
-            return filename;
-        } else {
-            return "Name Error";
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
         }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
     }
-
 
     private void uploadFileToFirebase(Uri fileUri) {
         if (fileUri != null) {
@@ -214,8 +243,10 @@ public class Administration extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(Administration.this, "File link saved to Firestore", Toast.LENGTH_SHORT).show();
-                        // Optionally fetch or update UI after successful save
-                        //fetchDocumentsFromFirestore();
+                        String documentId = documentReference.getId();
+                        // Optionally update the document to include the documentId
+                        documentReference.update("documentId", documentId);
+                        fetchDocumentsFromFirestore();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -225,5 +256,4 @@ public class Administration extends AppCompatActivity {
                     }
                 });
     }
-
 }

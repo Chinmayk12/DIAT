@@ -6,75 +6,41 @@
     android:padding="8dp">
 
     <RelativeLayout
-        android:id="@+id/fileLayout1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:padding="8dp">
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <ImageView
-            android:id="@+id/fileIconImageView1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
+            android:id="@+id/folder"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:padding="10dp"
             android:src="@drawable/folder_icon" />
 
-        <TextView
-            android:id="@+id/fileNameTextView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/fileIconImageView1"
-            android:layout_marginStart="16dp"
-            android:layout_centerVertical="true"
-            android:text="File Name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-        <ImageView
-            android:id="@+id/more_option1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/more_logo" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/fileLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:padding="8dp">
-
-        <ImageView
-            android:id="@+id/fileIconImageView2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/folder_icon"
-            />
+        <ImageButton
+            android:id="@+id/more_option"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/app_background1"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/more_logo"/>
 
         <TextView
-            android:id="@+id/fileNameTextView2"
+            android:id="@+id/fileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/fileIconImageView2"
-            android:layout_marginStart="16dp"
-            android:layout_centerVertical="true"
-            android:text="File Name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-        <ImageView
-            android:id="@+id/more_option2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/more_logo"
-            />
-
+            android:layout_alignBottom="@+id/folder"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="0dp"
+            android:fontFamily="@font/interbold"
+            android:text="Administration"
+            android:textColor="@color/black"
+            android:textSize="13sp"/>
     </RelativeLayout>
-
 </LinearLayout>

@@ -50,7 +50,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_circular"
                             android:padding="10dp"
-                            android:text="Choose Image"
+                            android:text="Choose File"
                             android:textAllCaps="false"
                             android:textSize="15sp"
                             android:textColor="#FFFFFF" />
