@@ -1,6 +1,4 @@
 package com.chinmay.diat;
-import static androidx.core.app.ActivityCompat.startActivityForResult;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -152,15 +150,17 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fileUri == null || filenameedittext.getText().toString().trim().isEmpty()) {
+                String filename = filenameedittext.getText().toString().trim();
+                if (fileUri == null || filename.isEmpty()) {
                     Toast.makeText(context, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Proceed with updating the file and saving the data
-                    updateFileInFirebase(fileUri, fileModel.getDocumentId());
+                    updateFileInFirebase(fileUri, fileModel.getDocumentId(), filename);
                     dialog.dismiss();
                 }
             }
         });
+
 
         // Show the dialog
         dialog.show();
@@ -217,9 +217,8 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         return result;
     }
 
-    private void updateFileInFirebase(Uri fileUri, String documentId) {
+    private void updateFileInFirebase(Uri fileUri, String documentId, String newFileName) {
         if (fileUri != null) {
-            String newFileName = getFileName(fileUri);
             StorageReference oldFileRef = storage.getReferenceFromUrl(currentFileModel.getDownloadUrl());
             oldFileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -277,6 +276,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
             });
         }
     }
+
 
     private void showDeleteConfirmationDialog(View view, FileModel fileModel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
