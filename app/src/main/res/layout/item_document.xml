@@ -41,6 +41,9 @@
             android:fontFamily="@font/interbold"
             android:text="Administration"
             android:textColor="@color/black"
-            android:textSize="13sp"/>
+            android:textSize="13sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:maxWidth="100dp"/>
     </RelativeLayout>
 </LinearLayout>

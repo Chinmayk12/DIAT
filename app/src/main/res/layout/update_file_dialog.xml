@@ -13,7 +13,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/dialogDeptTextView"
+            android:id="@+id/updateDocumentTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -30,7 +30,7 @@
             android:background="@drawable/editext_circular"
             android:drawableStart="@drawable/department_logo"
             android:drawablePadding="10dp"
-            android:hint="Enter File Name"
+            android:hint="Enter New File Name"
             android:inputType="text"
             android:layout_gravity="center"
             android:padding="20dp"

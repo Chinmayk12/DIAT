@@ -29,6 +29,7 @@
                 android:drawableStart="@drawable/img_rewind"
                 android:drawablePadding="10dp"
                 android:gravity="top"
+                android:singleLine="true"
                 android:hint="Find Department"
                 android:padding="10dp"
                 android:textColor="@color/white_A700"
@@ -100,6 +101,7 @@
                                 android:src="@drawable/administration_logo" />
 
                             <TextView
+                                android:id="@+id/textViewDepartmentName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"

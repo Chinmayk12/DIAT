@@ -35,6 +35,7 @@
                     android:drawableStart="@drawable/img_rewind"
                     android:drawablePadding="10dp"
                     android:gravity="top"
+                    android:singleLine="true"
                     android:hint="Find Document"
                     android:padding="10dp"
                     android:textColor="@color/white_A700"

@@ -9,6 +9,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -55,6 +57,7 @@ public class Administration extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FilesAdapter filesAdapter;
     private List<FileModel> fileList;
+    private EditText searchViewSearch; // Add this line
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -85,6 +88,21 @@ public class Administration extends AppCompatActivity {
             public void onClick(View v) {
                 showCustomDialog();
             }
+        });
+
+        // Initialize search input field
+        searchViewSearch = findViewById(R.id.searchViewSearch);
+        searchViewSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterFiles(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
     }
 
@@ -179,7 +197,6 @@ public class Administration extends AppCompatActivity {
         filesAdapter.handleActivityResult(requestCode, resultCode, data);
     }
 
-
     @SuppressLint("Range")
     private String getFileName(Uri uri) {
         String result = null;
@@ -254,5 +271,15 @@ public class Administration extends AppCompatActivity {
                         Toast.makeText(Administration.this, "Failed to save file link: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void filterFiles(String query) {
+        List<FileModel> filteredList = new ArrayList<>();
+        for (FileModel file : fileList) {
+            if (file.getFileName().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(file);
+            }
+        }
+        filesAdapter.filterList(filteredList);
     }
 }

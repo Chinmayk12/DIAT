@@ -91,6 +91,11 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         return fileList.size();
     }
 
+    public void filterList(List<FileModel> filteredList) {
+        fileList = filteredList;
+        notifyDataSetChanged();
+    }
+
     private void previewFile(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(intent);
