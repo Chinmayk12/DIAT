@@ -64,6 +64,8 @@ public class Academics extends AppCompatActivity {
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
 
+
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

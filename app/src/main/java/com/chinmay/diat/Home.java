@@ -1,9 +1,12 @@
 package com.chinmay.diat;
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +25,14 @@ public class Home extends AppCompatActivity {
     DepartmentAdapter adapter;
     List<DepartmentModel> departmentModelList;
 
+    ImageButton profile;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.home);
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         drawerLayout = findViewById(R.id.drawerLayout);
         searchEditText = findViewById(R.id.searchViewSearch);
@@ -36,6 +41,8 @@ public class Home extends AppCompatActivity {
         departmentModelList = new ArrayList<>();
         adapter = new DepartmentAdapter(this, departmentModelList);
         recyclerView.setAdapter(adapter);
+
+        profile = (ImageButton) findViewById(R.id.profile_icon);
 
         // Manually add departments (replace with your actual data)
         addDepartment("Administration", R.drawable.administration_logo);
@@ -62,6 +69,13 @@ public class Home extends AppCompatActivity {
                 adapter.filter(s.toString());
             }
         });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Profile.class));
+            }
+        });
     }
 
     private void addDepartment(String name, int iconResId) {
@@ -69,6 +83,7 @@ public class Home extends AppCompatActivity {
         departmentModelList.add(departmentModel);
         adapter.notifyDataSetChanged();
     }
+
 
     public void openDrawer(View view) {
         drawerLayout.open();
