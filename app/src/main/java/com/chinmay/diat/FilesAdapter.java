@@ -31,7 +31,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -152,19 +151,22 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         });
 
         // Set up the save button click listener
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String filename = filenameedittext.getText().toString().trim();
-                if (fileUri == null || filename.isEmpty()) {
-                    Toast.makeText(context, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
+        saveButton.setOnClickListener(v -> {
+            String filename = filenameedittext.getText().toString().trim();
+            if (filename.isEmpty()) {
+                Toast.makeText(context, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
+            } else {
+                if (fileUri == null) {
+                    // Update only the file name
+                    updateFileNameInFirebase(fileModel.getDepartmentId(), fileModel.getDocumentId(), filename);
                 } else {
                     // Proceed with updating the file and saving the data
-                    updateFileInFirebase(fileUri, fileModel.getDocumentId(), filename);
-                    dialog.dismiss();
+                    updateFileInFirebase(fileUri, fileModel.getDepartmentId(), fileModel.getDocumentId(), filename);
                 }
+                dialog.dismiss();
             }
         });
+
 
 
         // Show the dialog
@@ -222,63 +224,66 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         return result;
     }
 
-    private void updateFileInFirebase(Uri fileUri, String documentId, String newFileName) {
-        if (fileUri != null) {
+    private void updateFileInFirebase(@Nullable Uri fileUri, String departmentId, String documentId, String newFileName) {
+        if (fileUri != null && documentId != null && !newFileName.isEmpty()) {
             StorageReference oldFileRef = storage.getReferenceFromUrl(currentFileModel.getDownloadUrl());
-            oldFileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    StorageReference newFileRef = storage.getReference().child("administration/" + newFileName);
-                    newFileRef.putFile(fileUri)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    newFileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            String downloadUrl = uri.toString();
-                                            Map<String, Object> fileData = new HashMap<>();
-                                            fileData.put("fileName", newFileName);
-                                            fileData.put("downloadUrl", downloadUrl);
-                                            db.collection("documents")
-                                                    .document("administration")
-                                                    .collection("files")
-                                                    .document(documentId)
-                                                    .update(fileData)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            Toast.makeText(context, "File updated successfully", Toast.LENGTH_SHORT).show();
-                                                            // Refresh the list to reflect changes
-                                                            int position = fileList.indexOf(currentFileModel);
-                                                            currentFileModel.setFileName(newFileName);
-                                                            currentFileModel.setDownloadUrl(downloadUrl);
-                                                            notifyItemChanged(position);
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(context, "Failed to update file in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                        }
-                                    });
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(context, "Failed to upload new file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "Failed to delete old file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            oldFileRef.delete().addOnSuccessListener(aVoid -> {
+                StorageReference newFileRef = storage.getReference().child(departmentId + "/" + newFileName);
+                newFileRef.putFile(fileUri).addOnSuccessListener(taskSnapshot ->
+                        newFileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String downloadUrl = uri.toString();
+                            Map<String, Object> fileData = new HashMap<>();
+                            fileData.put("fileName", newFileName);
+                            fileData.put("downloadUrl", downloadUrl);
+                            db.collection("documents")
+                                    .document(departmentId)
+                                    .collection("files")
+                                    .document(documentId)
+                                    .update(fileData)
+                                    .addOnSuccessListener(aVoid1 -> {
+                                        Toast.makeText(context, "File updated successfully", Toast.LENGTH_SHORT).show();
+                                        int position = fileList.indexOf(currentFileModel);
+                                        currentFileModel.setFileName(newFileName);
+                                        currentFileModel.setDownloadUrl(downloadUrl);
+                                        notifyItemChanged(position);
+                                    })
+                                    .addOnFailureListener(e -> Toast.makeText(context, "Failed to update file in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        })
+                ).addOnFailureListener(e -> Toast.makeText(context, "Failed to upload new file: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> Toast.makeText(context, "Failed to delete old file: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void updateFileNameInFirebase(String departmentId, String documentId, String newFileName) {
+        if (documentId != null && !newFileName.isEmpty()) {
+            StorageReference oldFileRef = storage.getReferenceFromUrl(currentFileModel.getDownloadUrl());
+            StorageReference newFileRef = storage.getReference().child(departmentId + "/" + newFileName);
+
+            oldFileRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
+                newFileRef.putBytes(bytes)
+                        .addOnSuccessListener(taskSnapshot ->
+                                newFileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    String newDownloadUrl = uri.toString();
+                                    Map<String, Object> fileData = new HashMap<>();
+                                    fileData.put("fileName", newFileName);
+                                    fileData.put("downloadUrl", newDownloadUrl);
+                                    db.collection("documents")
+                                            .document(departmentId)
+                                            .collection("files")
+                                            .document(documentId)
+                                            .update(fileData)
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(context, "Filename updated successfully", Toast.LENGTH_SHORT).show();
+                                                int position = fileList.indexOf(currentFileModel);
+                                                currentFileModel.setFileName(newFileName);
+                                                currentFileModel.setDownloadUrl(newDownloadUrl);
+                                                notifyItemChanged(position);
+                                                oldFileRef.delete();
+                                            })
+                                            .addOnFailureListener(e -> Toast.makeText(context, "Failed to update filename in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                }))
+                        .addOnFailureListener(e -> Toast.makeText(context, "Failed to upload file with new name: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> Toast.makeText(context, "Failed to read old file: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
     }
 

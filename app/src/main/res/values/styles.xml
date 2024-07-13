@@ -7,6 +7,7 @@
         <item name="android:textFontWeight" tools:targetApi="p">700</item>
         <item name="android:background">@drawable/rectangle_bg_gray_900_radius_23</item>
     </style>
+
     <style name="groupStyleblue_100">
         <item name="android:background">@drawable/rectangle_bg_blue_100</item>
     </style>

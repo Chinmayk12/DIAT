@@ -1,20 +1,18 @@
 package com.chinmay.diat;
-
 public class FileModel {
     private String fileName;
     private String downloadUrl;
-    private String documentId; // Add this field for document ID
+    private String documentId;
+    private String departmentId;
 
     // Constructors, getters, and setters
-
     public FileModel() {
-        // Default constructor required for Firestore
     }
-
-    public FileModel(String fileName, String downloadUrl, String documentId) {
+    public FileModel(String fileName, String downloadUrl, String documentId, String departmentId) {
         this.fileName = fileName;
         this.downloadUrl = downloadUrl;
         this.documentId = documentId;
+        this.departmentId = departmentId;
     }
 
     public String getFileName() {
@@ -39,5 +37,13 @@ public class FileModel {
 
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 }

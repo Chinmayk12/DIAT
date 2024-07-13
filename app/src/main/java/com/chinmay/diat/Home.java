@@ -1,92 +1,73 @@
 package com.chinmay.diat;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Home extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
-    FirebaseAuth mAuth;
-    FirebaseUser user;
     EditText searchEditText;
-    ScrollView scrollView;
-    LinearLayout linearLayout;
-    ImageView administration;
+    RecyclerView recyclerView;
+    DepartmentAdapter adapter;
+    List<DepartmentModel> departmentModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.home);
-
-        mAuth = FirebaseAuth.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         drawerLayout = findViewById(R.id.drawerLayout);
-        administration = findViewById(R.id.administration);
         searchEditText = findViewById(R.id.searchViewSearch);
-        scrollView = findViewById(R.id.scrollView);
-        linearLayout = findViewById(R.id.linearLayout);
+        recyclerView = findViewById(R.id.recyclerViewDepartments);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        departmentModelList = new ArrayList<>();
+        adapter = new DepartmentAdapter(this, departmentModelList);
+        recyclerView.setAdapter(adapter);
 
-        administration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Administration.class));
-            }
-        });
+        // Manually add departments (replace with your actual data)
+        addDepartment("Administration", R.drawable.administration_logo);
+        addDepartment("Academics",R.drawable.academics_logo);
+        addDepartment("Research", R.drawable.research_logo);
+        addDepartment("Faculty",R.drawable.faculty);
+        addDepartment("Students", R.drawable.students);
+        addDepartment("Non DIAT Students", R.drawable.others_students);
+        addDepartment("Reimbursement",R.drawable.reimbursement_logo);
+        adapter.filter(" ");    // For to display the all departments when we open the app
 
-        // Add text change listener to EditText for searching
+
+        // Add more departments as needed
+
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
-                filterDepartments(s.toString());
+                adapter.filter(s.toString());
             }
         });
     }
 
-    // Method to filter departments based on search query
-    private void filterDepartments(String query) {
-        // Assuming you have a list of departments or views to filter
-        for (int i = 0; i < linearLayout.getChildCount(); i++) {
-            View childView = linearLayout.getChildAt(i);
-            // Replace this with your logic to filter views based on department names
-            if (childView instanceof CardView) {
-                CardView cardView = (CardView) childView;
-                // Example: Assuming you have a TextView inside CardView
-                TextView departmentTextView = cardView.findViewById(R.id.textViewDepartmentName);
-                if (departmentTextView != null) {
-                    String departmentName = departmentTextView.getText().toString().toLowerCase();
-                    if (departmentName.contains(query.toLowerCase())) {
-                        cardView.setVisibility(View.VISIBLE);
-                    } else {
-                        cardView.setVisibility(View.GONE);
-                    }
-                }
-            }
-        }
+    private void addDepartment(String name, int iconResId) {
+        DepartmentModel departmentModel = new DepartmentModel(name, iconResId);
+        departmentModelList.add(departmentModel);
+        adapter.notifyDataSetChanged();
     }
 
     public void openDrawer(View view) {

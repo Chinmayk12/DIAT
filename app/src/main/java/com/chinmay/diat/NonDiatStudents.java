@@ -20,12 +20,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,12 +40,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Administration extends AppCompatActivity {
+public class NonDiatStudents extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int PICK_FILE_REQUEST = 2;
@@ -66,7 +69,7 @@ public class Administration extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.administration);
+        setContentView(R.layout.non_diat_students);
 
         // Initialize Firebase Storage
         db = FirebaseFirestore.getInstance();
@@ -96,7 +99,8 @@ public class Administration extends AppCompatActivity {
         searchViewSearch = findViewById(R.id.searchViewSearch);
         searchViewSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -104,13 +108,14 @@ public class Administration extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 
     private void fetchDocumentsFromFirestore() {
         db.collection("documents")
-                .document("administration")
+                .document("non-diat-students")
                 .collection("files")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -160,7 +165,7 @@ public class Administration extends AppCompatActivity {
             public void onClick(View v) {
                 String filename = filenameedittext.getText().toString().trim();
                 if (fileUri == null || filename.isEmpty()) {
-                    Toast.makeText(Administration.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NonDiatStudents.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Proceed with uploading the file and saving the data
                     uploadFileToFirebase(fileUri, filename);
@@ -191,6 +196,14 @@ public class Administration extends AppCompatActivity {
     }
 
     @Override
+    /*protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fileUri = data.getData();
+        String fileName = getFileName(fileUri);
+        fileNameTextView.setText(fileName);
+        filesAdapter.handleActivityResult(requestCode, resultCode, data);
+    }*/
+
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_FILE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
@@ -208,7 +221,6 @@ public class Administration extends AppCompatActivity {
             Log.e("Administration", "Failed to handle file picker result");
         }
     }
-
 
     @SuppressLint("Range")
     private String getFileName(Uri uri) {
@@ -231,7 +243,7 @@ public class Administration extends AppCompatActivity {
 
     private void uploadFileToFirebase(Uri fileUri, String filename) {
         if (fileUri != null) {
-            StorageReference fileRef = storageReference.child("administration/" + filename);
+            StorageReference fileRef = storageReference.child("non-diat-students/" + filename);
             fileRef.putFile(fileUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -244,7 +256,7 @@ public class Administration extends AppCompatActivity {
                                     String downloadUrl = uri.toString();
                                     saveFileLinkToFirestore(filename, downloadUrl);
                                     // Here you can save the download URL to Firestore or perform other operations
-                                    Toast.makeText(Administration.this, "File uploaded to storage", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NonDiatStudents.this, "File uploaded to storage", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -252,7 +264,7 @@ public class Administration extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Administration.this, "Failed to upload file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NonDiatStudents.this, "Failed to upload file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -265,24 +277,24 @@ public class Administration extends AppCompatActivity {
 
         // Add the file link to the "files" subcollection under "administration"
         db.collection("documents")
-                .document("administration")
+                .document("non-diat-students")
                 .collection("files")
                 .add(fileData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(Administration.this, "File link saved to Firestore", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NonDiatStudents.this, "File link saved to Firestore", Toast.LENGTH_SHORT).show();
                         String documentId = documentReference.getId();
                         // Optionally update the document to include the documentId
                         documentReference.update("documentId", documentId);
-                        documentReference.update("departmentId", "administration");
+                        documentReference.update("departmentId", "non-diat-students");
                         fetchDocumentsFromFirestore();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(Administration.this, "Failed to save file link: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NonDiatStudents.this, "Failed to save file link: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
