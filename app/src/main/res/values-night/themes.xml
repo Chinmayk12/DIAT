@@ -1,18 +1,30 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
     <style name="Base.Theme.DIAT" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
         <item name="colorAccent">@android:color/black</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="android:navigationBarColor">@android:color/white</item>
         <item name="navigationViewStyle">@style/Widget.AppTheme.NavigationView</item>
+        <item name="colorSurface">@android:color/white</item>
+        <item name="colorOnSurface">@android:color/black</item>
     </style>
+
     <style name="Widget.AppTheme.NavigationView" parent="Widget.Design.NavigationView">
         <item name="android:background">@android:color/white</item>
         <item name="itemIconTint">@color/nav_item_icon_tint</item>
         <item name="itemTextColor">@color/nav_item_text_tint</item>
     </style>
+
     <style name="Theme.DIAT" parent="Base.Theme.DIAT" />
+
+    <!-- Add styles for TextInputLayout to ensure proper hint and focus behavior -->
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxBackgroundColor">@android:color/white</item>
+        <item name="hintTextColor">@color/black</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="boxStrokeColor">@android:color/black</item>
+    </style>
 </resources>
