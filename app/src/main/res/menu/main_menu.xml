@@ -7,11 +7,6 @@
             android:title="Home"
             />
 
-        <item android:id="@+id/template"
-            android:icon="@drawable/template_logo"
-            android:title="Templates"
-            />
-
         <item android:id="@+id/add_aachievement"
             android:icon="@drawable/achievement_logo"
             android:title="Add Achievement"

@@ -1,7 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.DIAT" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorAccent">@android:color/black</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="navigationViewStyle">@style/Widget.AppTheme.NavigationView</item>
     </style>
+    <style name="Widget.AppTheme.NavigationView" parent="Widget.Design.NavigationView">
+        <item name="android:background">@android:color/white</item>
+        <item name="itemIconTint">@color/nav_item_icon_tint</item>
+        <item name="itemTextColor">@color/nav_item_text_tint</item>
+    </style>
+    <style name="Theme.DIAT" parent="Base.Theme.DIAT" />
 </resources>
