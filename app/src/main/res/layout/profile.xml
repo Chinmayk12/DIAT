@@ -39,13 +39,13 @@
                         android:src="@drawable/diat_logo" />
 
                     <TextView
-                        android:id="@+id/welcome"
+                        android:id="@+id/welcomeUserText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:text="Welcome Chinmay Karoodpati"
+                        android:text="Welcome User"
                         android:textColor="@color/white_A700"
                         android:textSize="20dp"
                         android:fontFamily="@font/interbold"
@@ -80,8 +80,8 @@
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/profile_image"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="10dp"
                                 android:src="@drawable/profile_logo"
@@ -94,7 +94,7 @@
 
                             <ImageButton
                                 android:id="@+id/camerabtn"
-                                android:layout_width="25dp"
+                                android:layout_width="30dp"
                                 android:layout_height="25dp"
                                 android:background="@color/white_A700"
                                 android:clickable="true"
@@ -136,11 +136,11 @@
 
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/admin_mail"
+                            android:id="@+id/admin_designation"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="20dp"
-                            android:hint="Enter Email"
+                            android:hint="Enter Designation"
                             app:boxBackgroundMode="outline"
                             app:endIconTint="#878787"
                             app:startIconTint="#878787">
@@ -148,33 +148,11 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/mail_logo"
+                                android:drawableStart="@drawable/designation_logo"
                                 android:drawablePadding="10dp"
                                 android:ems="10"
                                 android:textColor="@color/black"
-                                android:inputType="text|number"
-                                android:padding="20dp"
-                                android:textColorHint="#878787"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/admin_password"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="20dp"
-                            android:hint="Enter Password"
-                            app:boxBackgroundMode="outline"
-                            app:endIconTint="#878787"
-                            app:startIconTint="#878787">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/password_vector"
-                                android:drawablePadding="10dp"
-                                android:ems="10"
-                                android:textColor="@color/black"
-                                android:inputType="text|number"
+                                android:inputType="text"
                                 android:padding="20dp"
                                 android:textColorHint="#878787"/>
                         </com.google.android.material.textfield.TextInputLayout>

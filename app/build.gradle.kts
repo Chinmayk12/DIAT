@@ -41,6 +41,10 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")     // For Circular Image
     implementation("com.google.firebase:firebase-storage")  // Cloud Storage
     implementation ("com.guolindev.permissionx:permissionx:1.8.0")  // PermissionX
+    implementation ("de.hdodenhof:circleimageview:3.1.0")     // For Circular Image
+    implementation ("com.github.bumptech.glide:glide:4.16.0") // Glide Library for fetching an image
+    implementation ("com.guolindev.permissionx:permissionx:1.7.1")    // For PermissionX
+    implementation ("com.github.dhaval2404:imagepicker:2.1")
     implementation ("androidx.activity:activity-ktx:1.4.0")
     implementation ("androidx.fragment:fragment-ktx:1.4.0")
     implementation ("androidx.core:core:1.7.0")

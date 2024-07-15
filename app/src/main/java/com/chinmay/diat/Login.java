@@ -122,6 +122,7 @@ public class Login extends AppCompatActivity {
         Map<String, String> userData = new HashMap<>();
         userData.put("email", mAuth.getCurrentUser().getEmail());
         userData.put("username", username);
+        userData.put("uid",uid);
 
         db.collection("users").document(uid)
                 .set(userData, SetOptions.merge())
