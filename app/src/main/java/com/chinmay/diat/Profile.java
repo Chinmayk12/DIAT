@@ -163,7 +163,7 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    // Method to launch ImagePicker
+    // Method to launch ImagePicker..
     private void launchImagePicker() {
         ImagePicker.Companion.with(Profile.this)
                 .crop()
