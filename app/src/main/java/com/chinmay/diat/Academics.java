@@ -41,6 +41,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +66,8 @@ public class Academics extends AppCompatActivity {
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
 
+    TextView shortnametextview;
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -84,11 +88,12 @@ public class Academics extends AppCompatActivity {
         fileList = new ArrayList<>();
         filesAdapter = new FilesAdapter(this, fileList);
         recyclerView.setAdapter(filesAdapter);
+        addfile = findViewById(R.id.floatingbutton);
+        shortnametextview = (TextView)findViewById(R.id.shortnametextview);
+        searchViewSearch = findViewById(R.id.searchViewSearch);
 
         // Fetch data from Firestore
         fetchDocumentsFromFirestore();
-
-        addfile = findViewById(R.id.floatingbutton);
 
         addfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,8 +102,14 @@ public class Academics extends AppCompatActivity {
             }
         });
 
+        shortnametextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Profile.class));
+            }
+        });
+
         // Initialize search input field
-        searchViewSearch = findViewById(R.id.searchViewSearch);
         searchViewSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -113,6 +124,10 @@ public class Academics extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        // Fetch the username and display initials
+        FirebaseUtils firebaseUtils = new FirebaseUtils();
+        firebaseUtils.fetchAndDisplayInitials(shortnametextview);
     }
 
     private void fetchDocumentsFromFirestore() {

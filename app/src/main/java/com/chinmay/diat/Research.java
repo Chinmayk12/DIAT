@@ -63,6 +63,7 @@ public class Research extends AppCompatActivity {
     private FilesAdapter filesAdapter;
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
+    TextView shortnametextview;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -82,16 +83,23 @@ public class Research extends AppCompatActivity {
         fileList = new ArrayList<>();
         filesAdapter = new FilesAdapter(this, fileList);
         recyclerView.setAdapter(filesAdapter);
+        shortnametextview = (TextView)findViewById(R.id.shortnametextview);
+        addfile = findViewById(R.id.floatingbutton);
 
         // Fetch data from Firestore
         fetchDocumentsFromFirestore();
-
-        addfile = findViewById(R.id.floatingbutton);
 
         addfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showCustomDialog();
+            }
+        });
+
+        shortnametextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Profile.class));
             }
         });
 
@@ -111,6 +119,10 @@ public class Research extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        // Fetch the username and display initials
+        FirebaseUtils firebaseUtils = new FirebaseUtils();
+        firebaseUtils.fetchAndDisplayInitials(shortnametextview);
     }
 
     private void fetchDocumentsFromFirestore() {

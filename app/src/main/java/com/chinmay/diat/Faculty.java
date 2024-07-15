@@ -60,6 +60,7 @@ public class Faculty extends AppCompatActivity {
     private FilesAdapter filesAdapter;
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
+    TextView shortnametextview;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -78,6 +79,7 @@ public class Faculty extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns in the grid
         fileList = new ArrayList<>();
         filesAdapter = new FilesAdapter(this, fileList);
+        shortnametextview = (TextView)findViewById(R.id.shortnametextview);
         recyclerView.setAdapter(filesAdapter);
 
         // Fetch data from Firestore
@@ -89,6 +91,13 @@ public class Faculty extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showCustomDialog();
+            }
+        });
+
+        shortnametextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Profile.class));
             }
         });
 
@@ -106,6 +115,9 @@ public class Faculty extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {}
         });
+        // Fetch the username and display initials
+        FirebaseUtils firebaseUtils = new FirebaseUtils();
+        firebaseUtils.fetchAndDisplayInitials(shortnametextview);
     }
 
     private void fetchDocumentsFromFirestore() {
@@ -189,15 +201,6 @@ public class Faculty extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, PICK_FILE_REQUEST);
     }
-
-    @Override
-    /*protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        fileUri = data.getData();
-        String fileName = getFileName(fileUri);
-        fileNameTextView.setText(fileName);
-        filesAdapter.handleActivityResult(requestCode, resultCode, data);
-    }*/
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

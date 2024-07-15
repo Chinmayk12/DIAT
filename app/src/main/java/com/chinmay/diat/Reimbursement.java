@@ -63,6 +63,7 @@ public class Reimbursement extends AppCompatActivity {
     private FilesAdapter filesAdapter;
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
+    TextView shortnametextview;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -82,12 +83,12 @@ public class Reimbursement extends AppCompatActivity {
         fileList = new ArrayList<>();
         filesAdapter = new FilesAdapter(this, fileList);
         recyclerView.setAdapter(filesAdapter);
+        shortnametextview = (TextView)findViewById(R.id.shortnametextview);
+        addfile = findViewById(R.id.floatingbutton);
+        searchViewSearch = findViewById(R.id.searchViewSearch);  // Initialize search input field
 
         // Fetch data from Firestore
         fetchDocumentsFromFirestore();
-
-        addfile = findViewById(R.id.floatingbutton);
-
         addfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,8 +96,12 @@ public class Reimbursement extends AppCompatActivity {
             }
         });
 
-        // Initialize search input field
-        searchViewSearch = findViewById(R.id.searchViewSearch);
+        shortnametextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Profile.class));
+            }
+        });
         searchViewSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -111,6 +116,9 @@ public class Reimbursement extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+        // Fetch the username and display initials
+        FirebaseUtils firebaseUtils = new FirebaseUtils();
+        firebaseUtils.fetchAndDisplayInitials(shortnametextview);
     }
 
     private void fetchDocumentsFromFirestore() {
