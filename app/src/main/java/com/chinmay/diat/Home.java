@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -13,12 +14,14 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,7 +40,7 @@ public class Home extends AppCompatActivity {
     List<DepartmentModel> departmentModelList;
     TextView shortnametextview;
     ImageButton profile;
-
+    NavigationView navigationView;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
@@ -56,6 +59,7 @@ public class Home extends AppCompatActivity {
 
         // Instances
         drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigationView);
         searchEditText = findViewById(R.id.searchViewSearch);
         recyclerView = findViewById(R.id.recyclerViewDepartments);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -92,6 +96,28 @@ public class Home extends AppCompatActivity {
             }
         });
 
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.home) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                } else if (id == R.id.add_aachievement) {
+                    startActivity(new Intent(Home.this, AddAchievements.class));
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                } else if (id == R.id.logout) {
+                    // Handle logout logic here
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

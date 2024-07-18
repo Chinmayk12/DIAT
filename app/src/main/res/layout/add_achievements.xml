@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background1"
+    tools:context=".AddAchievements">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/ll1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/relativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/circular_layout"
+                    android:paddingTop="70dp"
+                    android:paddingBottom="10dp">
+
+                    <ImageView
+                        android:id="@+id/add_achivement_logo"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/add_achivement_logo" />
+
+                    <TextView
+                        android:id="@+id/welcomeUserText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/add_achivement_logo"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="Achievements"
+                        android:textColor="@color/white_A700"
+                        android:textSize="20dp"
+                        android:fontFamily="@font/interbold"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/input_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/achievement_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/CustomOutlinedTextInput"
+                        android:layout_margin="20dp"
+                        app:boxCornerRadiusBottomStart="20dp"
+                        app:boxCornerRadiusBottomEnd="20dp"
+                        app:boxCornerRadiusTopStart="20dp"
+                        app:boxCornerRadiusTopEnd="20dp"
+                        android:hint="Enter Name">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/person_symbol"
+                            android:drawablePadding="10dp"
+                            android:inputType="text"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/achievement_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        style="@style/CustomOutlinedTextInput"
+                        android:hint="Enter Achievment Description"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusBottomStart="20dp"
+                        app:boxCornerRadiusBottomEnd="20dp"
+                        app:boxCornerRadiusTopStart="20dp"
+                        app:boxCornerRadiusTopEnd="20dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/achievment_logo_edittext"
+                            android:drawablePadding="10dp"
+                            android:minLines="3"
+                            android:maxLines="3"
+                            android:textColor="@color/black"
+                            android:inputType="textMultiLine"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload\nImage"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/interbold"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/achievement_image_upload_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/button_circular"
+                        android:src="@drawable/upload_logo"
+                        android:padding="13dp"/>
+
+                </LinearLayout>
+
+                <!-- Progress Bar for Upload Progress -->
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress_circular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    app:indicatorSize="48dp"
+                    app:trackThickness="4dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/addAchivementbtn"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/button_circular"
+                    android:padding="13dp"
+                    android:gravity="center"
+                    android:text="Add Achievement"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu"
+        android:layout_gravity="start"/>
+</androidx.drawerlayout.widget.DrawerLayout>
