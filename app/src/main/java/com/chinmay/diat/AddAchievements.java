@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -121,8 +122,13 @@ public class AddAchievements extends AppCompatActivity {
             return;
         }
 
+        // Create a new document reference for the achievement
+        DocumentReference newAchievementRef = db.collection("achievements").document();
+        String achievementId = newAchievementRef.getId();
+
         // Prepare a document to store in Firestore
         Map<String, Object> achievementData = new HashMap<>();
+        achievementData.put("id", achievementId); // Add the unique ID to the data
         achievementData.put("name", name);
         achievementData.put("description", description);
         List<String> imageUrls = new ArrayList<>();
@@ -177,10 +183,10 @@ public class AddAchievements extends AppCompatActivity {
                             achievementData.put("imageUrls", imageUrls);
 
                             // Store the document in Firestore
-                            db.collection("achievements")
-                                    .add(achievementData)
-                                    .addOnSuccessListener(documentReference -> {
-                                        Toast.makeText(getApplicationContext(), "Achievement added successfully", Toast.LENGTH_SHORT).show();
+                            newAchievementRef
+                                    .set(achievementData)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(getApplicationContext(), "AchievementModel added successfully", Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
                                         finish(); // Finish the activity or navigate to another screen
                                     })

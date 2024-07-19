@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="30dp"
+        app:cardBackgroundColor="#EAEAEA"
+        android:elevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="30dp"
+                android:layout_margin="10dp"
+                app:cardBackgroundColor="@color/white_A700"
+                android:elevation="5dp">
+
+                <ImageView
+                    android:id="@+id/achievmen_img"
+                    android:layout_width="150dp"
+                    android:scaleType="centerCrop"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/diat_logo"/>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:orientation="vertical"
+                >
+                
+                <TextView
+                    android:id="@+id/achievement_name_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Chinmay Karodpati"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/interbold"
+                    android:textSize="20dp"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:id="@+id/achievement_description_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:text="Placement At : Google , Microsoft , Adobe , Media.Net , Amaxon , Flipkart , Zomato , Swiggy"
+                    android:textSize="17dp"
+                    android:gravity="center"
+                    />
+                
+            </LinearLayout>
+            
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

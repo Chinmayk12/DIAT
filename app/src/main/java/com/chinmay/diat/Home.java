@@ -1,6 +1,8 @@
 package com.chinmay.diat;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -105,13 +107,13 @@ public class Home extends AppCompatActivity {
                 if (id == R.id.home) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
-                } else if (id == R.id.add_aachievement) {
-                    startActivity(new Intent(Home.this, AddAchievements.class));
+                } else if (id == R.id.Achievements) {
+                    startActivity(new Intent(Home.this, AllAchievements.class));
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
                 } else if (id == R.id.logout) {
-                    // Handle logout logic here
                     drawerLayout.closeDrawer(GravityCompat.START);
+                    logoutUser(navigationView);
                     return true;
                 } else {
                     return false;
@@ -136,7 +138,30 @@ public class Home extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    public void logoutUser(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to log out?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Sign out the current authenticated user from Firebase
+                FirebaseAuth.getInstance().signOut();
 
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                finishAffinity();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface alertDialog, int which) {
+                // User clicked No, do nothing
+                alertDialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+    }
     public void openDrawer(View view) {
         drawerLayout.open();
     }

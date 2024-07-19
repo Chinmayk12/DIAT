@@ -25,6 +25,12 @@
         android:theme="@style/Theme.DIAT"
         tools:targetApi="31">
         <activity
+            android:name=".Achievement"
+            android:exported="false" />
+        <activity
+            android:name=".AllAchievements"
+            android:exported="false" />
+        <activity
             android:name=".AddAchievements"
             android:exported="false" />
         <activity
