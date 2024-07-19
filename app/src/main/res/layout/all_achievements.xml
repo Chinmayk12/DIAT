@@ -13,70 +13,72 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ll1"
+        <LinearLayout
+            android:id="@+id/ll1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="@drawable/circular_layout"
+                android:paddingTop="40dp"
+                android:paddingBottom="10dp">
 
-                <RelativeLayout
-                    android:id="@+id/relativeLayout"
+                <ImageView
+                    android:id="@+id/add_achivement_logo"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/add_achivement_logo" />
+
+                <TextView
+                    android:id="@+id/welcomeUserText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/circular_layout"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="10dp">
+                    android:layout_below="@+id/add_achivement_logo"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="Achievements"
+                    android:textColor="@color/white_A700"
+                    android:textSize="20dp"
+                    android:fontFamily="@font/interbold"
+                    android:textStyle="bold" />
+            </RelativeLayout>
 
-                    <ImageView
-                        android:id="@+id/add_achivement_logo"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:layout_gravity="center"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/add_achivement_logo" />
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/welcomeUserText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/add_achivement_logo"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:text="Achievements"
-                        android:textColor="@color/white_A700"
-                        android:textSize="20dp"
-                        android:fontFamily="@font/interbold"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@+id/ll1"
+            android:layout_above="@+id/addAchivementbtn"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:scrollbars="none"
+            />
 
-            </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addAchivementbtn"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/button_circular"
+            android:padding="13dp"
+            android:gravity="center"
+            android:text="Add Achievement"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/ll1"
-                android:scrollbars="none"
-                />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/addAchivementbtn"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="50dp"
-                android:background="@drawable/button_circular"
-                android:padding="13dp"
-                android:gravity="center"
-                android:text="Add Achievement"
-                android:textColor="#FFFFFF"
-                android:textAllCaps="false"
-                android:textSize="15sp"
-                />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
