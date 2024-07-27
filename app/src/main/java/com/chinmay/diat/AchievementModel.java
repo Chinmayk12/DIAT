@@ -31,7 +31,7 @@ public class AchievementModel {
     }
 
     public void setName(String name) {
-        this.name = "Name:"+name;
+        this.name = name;
     }
 
     public String getDescription() {
@@ -39,7 +39,7 @@ public class AchievementModel {
     }
 
     public void setDescription(String description) {
-        this.description = "<b>Description:</b><br>"+description;
+        this.description =description;
     }
 
     public List<String> getImageUrls() {

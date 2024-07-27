@@ -35,9 +35,8 @@ public class Achievement extends AppCompatActivity {
         ArrayList<String> imageUrls = getIntent().getStringArrayListExtra("imageUrls");
 
         // Set the name and description
-        achievementName.setText(name);
-        String descriptionText = description;
-        achievementDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
+        achievementName.setText("Name:"+name);
+        achievementDescription.setText(description);
 
         // Create a list of SlideModel objects
         List<SlideModel> slideModels = new ArrayList<>();

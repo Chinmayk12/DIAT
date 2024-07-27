@@ -19,6 +19,8 @@ public class AllAchievements extends AppCompatActivity {
     private AchievementsAdapter achievementsAdapter;
     private List<AchievementModel> achievementModelList;
     private FirebaseFirestore db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,8 @@ public class AllAchievements extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),AddAchievements.class));
             }
         });
+
+
     }
 
     private void loadAchievements() {

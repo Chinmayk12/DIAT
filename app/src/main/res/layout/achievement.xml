@@ -42,11 +42,11 @@
                 android:id="@+id/achievement_name_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_margin="10dp"
                 android:gravity="center"
                 android:text="Name"
                 android:fontFamily="@font/interbold"
-                android:textSize="26sp"
+                android:textSize="22sp"
                 android:textColor="@color/black"/>
 
             <LinearLayout
@@ -60,6 +60,19 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/circular_textview">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="start"
+                    android:text="Description:"
+                    android:textSize="20sp"
+                    android:textStyle="italic|bold"
+                    android:textColor="@color/black"/>
+
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -71,6 +84,10 @@
                         android:id="@+id/achievement_description_textview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="0dp"
                         android:gravity="start"
                         android:justificationMode="inter_word"
                         android:padding="10dp"
