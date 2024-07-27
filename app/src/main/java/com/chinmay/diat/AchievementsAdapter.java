@@ -84,7 +84,7 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         int id = menuItem.getItemId();
                         if (id == R.id.achievement_update) {
-                            Toast.makeText(context,"Update",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context,"Update",Toast.LENGTH_SHORT).show();
                             updateAchievement(achievementModel);
 
                         } else if (id == R.id.achievement_delete) {
