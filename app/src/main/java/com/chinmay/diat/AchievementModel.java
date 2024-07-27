@@ -39,7 +39,7 @@ public class AchievementModel {
     }
 
     public void setDescription(String description) {
-        this.description = "<b>Description:</b>"+description;
+        this.description = "<b>Description:</b><br>"+description;
     }
 
     public List<String> getImageUrls() {

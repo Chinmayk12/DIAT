@@ -65,10 +65,7 @@ public class Academics extends AppCompatActivity {
     private FilesAdapter filesAdapter;
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
-
     TextView shortnametextview;
-
-
 
     @SuppressLint("MissingInflatedId")
     @Override

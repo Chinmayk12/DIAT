@@ -1,12 +1,11 @@
 package com.chinmay.diat;
 
 import android.os.Bundle;
+import android.text.Html;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -17,20 +16,34 @@ import java.util.List;
 
 public class Achievement extends AppCompatActivity {
 
-    ImageSlider imageSlider;
+    private ImageSlider imageSlider;
+    private TextView achievementName, achievementDescription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.achievement);
 
-        imageSlider= findViewById(R.id.image_slider);
+        imageSlider = findViewById(R.id.image_slider);
+        achievementName = findViewById(R.id.achievement_name_textview);
+        achievementDescription = findViewById(R.id.achievement_description_textview);
+
+        // Get the passed data
+        String name = getIntent().getStringExtra("name");
+        String description = getIntent().getStringExtra("description");
+        ArrayList<String> imageUrls = getIntent().getStringArrayListExtra("imageUrls");
+
+        // Set the name and description
+        achievementName.setText(name);
+        String descriptionText = description;
+        achievementDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
 
         // Create a list of SlideModel objects
         List<SlideModel> slideModels = new ArrayList<>();
-        slideModels.add(new SlideModel(R.drawable.diat_logo, ScaleTypes.CENTER_CROP));
-        slideModels.add(new SlideModel(R.drawable.students, ScaleTypes.CENTER_CROP));
-        slideModels.add(new SlideModel(R.drawable.achievement_logo, ScaleTypes.CENTER_CROP));
+        for (String imageUrl : imageUrls) {
+            slideModels.add(new SlideModel(imageUrl, ScaleTypes.CENTER_CROP));
+        }
 
         // Set the images in the ImageSlider
         imageSlider.setImageList(slideModels, ScaleTypes.CENTER_CROP);

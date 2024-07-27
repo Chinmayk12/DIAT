@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -99,6 +100,20 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(intent);
     }
+
+//    private void previewFile(String url) {
+//        // Check if the URL is already a Google Drive URL
+//        String googleDriveUrl;
+//        if (url.contains("drive.google.com")) {
+//            googleDriveUrl = url;
+//        } else {
+//            // Create a Google Drive preview URL
+//            googleDriveUrl = "https://drive.google.com/viewerng/viewer?embedded=true&url=" + url;
+//        }
+//
+//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(googleDriveUrl));
+//        context.startActivity(intent);
+//    }
 
     private void showPopupMenu(View view, FileModel fileModel) {
         PopupMenu popupMenu = new PopupMenu(context, view); // Use 'context' here
@@ -410,6 +425,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
 
         public FileViewHolder(@NonNull View itemView) {
             super(itemView);
+
             folder = itemView.findViewById(R.id.folder);
             fileName = itemView.findViewById(R.id.fileName);
             moreOption = itemView.findViewById(R.id.more_option);

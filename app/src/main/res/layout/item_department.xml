@@ -35,6 +35,7 @@
             android:layout_below="@+id/imageViewDepartmentIcon"
             android:layout_centerHorizontal="true"
             android:layout_gravity="bottom|center"
+            android:gravity="center"
             android:fontFamily="@font/interbold"
             android:text="Department Name"
             android:textColor="@color/black"
