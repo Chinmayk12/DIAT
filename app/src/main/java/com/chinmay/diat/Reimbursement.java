@@ -2,6 +2,7 @@ package com.chinmay.diat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,12 +26,16 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,6 +60,8 @@ public class Reimbursement extends AppCompatActivity {
     private EditText filenameedittext;
     private FirebaseStorage storage;
     private FirebaseFirestore db;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
     private StorageReference storageReference;
     private ImageView more_options;
     private FloatingActionButton addfile;
@@ -78,6 +85,8 @@ public class Reimbursement extends AppCompatActivity {
         storageReference = storage.getReference();
 
         // Instances
+        navigationView = findViewById(R.id.navigationView);
+        drawerLayout = findViewById(R.id.drawerLayout);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns in the grid
         fileList = new ArrayList<>();
@@ -115,6 +124,23 @@ public class Reimbursement extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
             }
+        });
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.Achievements) {
+                startActivity(new Intent(Reimbursement.this, AllAchievements.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.logout) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                logoutUser(navigationView);
+                return true;
+            }
+            return false;
         });
         // Fetch the username and display initials
         FirebaseUtils firebaseUtils = new FirebaseUtils();
@@ -306,7 +332,22 @@ public class Reimbursement extends AppCompatActivity {
                     }
                 });
     }
-
+    public void logoutUser(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to log out?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            // Sign out the current authenticated user from Firebase
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Login.class));
+            finishAffinity();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+            // User clicked No, do nothing
+            dialog.dismiss();
+        });
+        builder.create().show();
+    }
     private void filterFiles(String query) {
         List<FileModel> filteredList = new ArrayList<>();
         for (FileModel file : fileList) {

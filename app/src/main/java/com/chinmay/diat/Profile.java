@@ -1,6 +1,7 @@
 package com.chinmay.diat;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,11 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,8 +46,8 @@ public class Profile extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    CircleImageView profilecircleImageView;
     TextInputLayout name, designation;
+    NavigationView navigationView;
     TextView welcomeUserText;
     AppCompatButton updatebtn;
     ImageButton camerabtn;
@@ -66,6 +69,7 @@ public class Profile extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
         // Instances
+        navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawerLayout);
         name = findViewById(R.id.admin_name);
         designation = findViewById(R.id.admin_designation);
@@ -91,6 +95,23 @@ public class Profile extends AppCompatActivity {
             public void onClick(View view) {
                 launchImagePicker();
             }
+        });
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.Achievements) {
+                startActivity(new Intent(Profile.this, AllAchievements.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.logout) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                logoutUser(navigationView);
+                return true;
+            }
+            return false;
         });
     }
 
@@ -243,6 +264,22 @@ public class Profile extends AppCompatActivity {
                         }
                     });
         }
+    }
+    public void logoutUser(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to log out?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            // Sign out the current authenticated user from Firebase
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Login.class));
+            finishAffinity();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+            // User clicked No, do nothing
+            dialog.dismiss();
+        });
+        builder.create().show();
     }
 
     // Method to open the navigation drawer

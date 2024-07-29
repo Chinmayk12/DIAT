@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/circular_layout"
-                android:paddingTop="40dp"
+                android:paddingTop="20dp"
                 android:paddingBottom="10dp">
 
                 <ImageView
@@ -49,6 +49,22 @@
                     android:fontFamily="@font/interbold"
                     android:textStyle="bold" />
             </RelativeLayout>
+
+            <EditText
+                android:id="@+id/searchAchivement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/rectangle_bg_gray_900_radius_22"
+                android:drawableStart="@drawable/img_rewind"
+                android:drawablePadding="10dp"
+                android:gravity="top"
+                android:singleLine="true"
+                android:hint="Search Achivement"
+                android:padding="10dp"
+                android:textColor="@color/white_A700"
+                android:textColorHint="@color/white_A700" />
 
         </LinearLayout>
 

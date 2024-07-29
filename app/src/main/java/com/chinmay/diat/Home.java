@@ -1,9 +1,7 @@
 package com.chinmay.diat;
-
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -20,10 +18,10 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.PermissionChecker;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -39,8 +37,10 @@ import java.util.List;
 
 public class Home extends AppCompatActivity {
 
-    private static final int PERMISSION_REQUEST_CODE = 100;
+    private static final int MEDIA_PERMISSION_REQUEST_CODE = 100;
     private static final int MANAGE_EXTERNAL_STORAGE_REQUEST_CODE = 101;
+    private static final String PREFS_NAME = "PermissionPrefs";
+    private static final String KEY_MANAGE_EXTERNAL_STORAGE_GRANTED = "manage_external_storage_granted";
 
     DrawerLayout drawerLayout;
     EditText searchEditText;
@@ -53,6 +53,7 @@ public class Home extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,9 @@ public class Home extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         currentUser = mAuth.getCurrentUser();
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         // Initialize Views
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -135,23 +139,31 @@ public class Home extends AppCompatActivity {
     }
 
     private void checkAndRequestPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // For Android 13 and above
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED /*||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED*/) {
+
+                // Request media permissions
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.READ_MEDIA_IMAGES,
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        /*Manifest.permission.READ_MEDIA_AUDIO*/
+                }, MEDIA_PERMISSION_REQUEST_CODE);
+            } else {
+                // Media permissions already granted, show dialog for MANAGE_EXTERNAL_STORAGE
+                if (!sharedPreferences.getBoolean(KEY_MANAGE_EXTERNAL_STORAGE_GRANTED, false)) {
+                    showManageExternalStorageDialog();
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // For Android 11 and 12
             if (!Environment.isExternalStorageManager()) {
                 // Request MANAGE_EXTERNAL_STORAGE permission
-                new AlertDialog.Builder(this)
-                        .setTitle("Permission Required")
-                        .setMessage("This app needs permission to access all files on your device. Please grant this permission in the settings.")
-                        .setPositiveButton("OK", (dialog, which) -> {
-                            // Redirect to the settings page if user agrees
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                            startActivityForResult(intent, MANAGE_EXTERNAL_STORAGE_REQUEST_CODE);
-                        })
-                        .setNegativeButton("Cancel", (dialog, which) -> {
-                            // Permission not granted, handle appropriately
-                            Toast.makeText(this, "Permission denied. Cannot proceed with media operations.", Toast.LENGTH_SHORT).show();
-                        })
-                        .create()
-                        .show();
+                if (!sharedPreferences.getBoolean(KEY_MANAGE_EXTERNAL_STORAGE_GRANTED, false)) {
+                    showManageExternalStorageDialog();
+                }
             } else {
                 // Permissions already granted
                 proceedWithMediaOperations();
@@ -165,7 +177,7 @@ public class Home extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
-                }, PERMISSION_REQUEST_CODE);
+                }, MEDIA_PERMISSION_REQUEST_CODE);
             } else {
                 // Permissions already granted
                 proceedWithMediaOperations();
@@ -173,11 +185,31 @@ public class Home extends AppCompatActivity {
         }
     }
 
+    private void showManageExternalStorageDialog() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission Required")
+                    .setMessage("This app needs 'Manage All Files' permission to access all files on your device. Please grant this permission in the settings.")
+                    .setPositiveButton("Go to Settings", (dialog, which) -> {
+                        try {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                            intent.setData(Uri.parse("package:" + getPackageName()));
+                            startActivityForResult(intent, MANAGE_EXTERNAL_STORAGE_REQUEST_CODE);
+                        } catch (Exception e) {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                            startActivityForResult(intent, MANAGE_EXTERNAL_STORAGE_REQUEST_CODE);
+                        }
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .create()
+                    .show();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_REQUEST_CODE) {
+        if (requestCode == MEDIA_PERMISSION_REQUEST_CODE) {
             boolean allGranted = true;
             for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
@@ -186,11 +218,15 @@ public class Home extends AppCompatActivity {
                 }
             }
             if (allGranted) {
-                // All permissions granted
-                proceedWithMediaOperations();
+                Toast.makeText(this, "Media permissions granted", Toast.LENGTH_SHORT).show();
+                // Show dialog for MANAGE_EXTERNAL_STORAGE if needed
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !sharedPreferences.getBoolean(KEY_MANAGE_EXTERNAL_STORAGE_GRANTED, false)) {
+                    showManageExternalStorageDialog();
+                } else {
+                    proceedWithMediaOperations();
+                }
             } else {
-                // Permissions denied
-                Toast.makeText(this, "Permissions denied. Cannot proceed with media operations.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Media permissions denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -198,15 +234,17 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == MANAGE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 if (Environment.isExternalStorageManager()) {
-                    // Permission granted
+                    Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
+                    // Save preference indicating that the permission has been granted
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(KEY_MANAGE_EXTERNAL_STORAGE_GRANTED, true);
+                    editor.apply();
                     proceedWithMediaOperations();
                 } else {
-                    // Permission denied
-                    Toast.makeText(this, "Permission denied. Cannot proceed with media operations.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "MANAGE_EXTERNAL_STORAGE permission denied", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -218,26 +256,14 @@ public class Home extends AppCompatActivity {
 
     public void logoutUser(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-        builder.setTitle("Logout");
-        builder.setMessage("Are you sure you want to log out?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            // Sign out the current authenticated user from Firebase
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(getApplicationContext(), Login.class));
-            finishAffinity();
-        });
-        builder.setNegativeButton("No", (dialog, which) -> {
-            // User clicked No, do nothing
-            dialog.dismiss();
-        });
-        builder.create().show();
-    }
-
-    public void openDrawer(View view) {
-        drawerLayout.open();
-    }
-
-    public void closeDrawer(View view) {
-        drawerLayout.close();
+        builder.setTitle("Logout")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(Home.this, Login.class));
+                    finish();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }
