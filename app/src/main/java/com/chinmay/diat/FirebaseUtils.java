@@ -60,4 +60,27 @@ public class FirebaseUtils {
         }
         return initials.toString().toUpperCase();
     }
+
+    public void fetchAndDisplayUserInfo(TextView drawerUserName, TextView drawerUserEmail) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            db.collection("users").document(userId).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        String name = document.getString("username");
+                        String email = document.getString("email");
+
+                        if (name != null) {
+                            drawerUserName.setText(name);
+                        }
+                        if (email != null) {
+                            drawerUserEmail.setText(email);
+                        }
+                    }
+                }
+            });
+        }
+    }
 }

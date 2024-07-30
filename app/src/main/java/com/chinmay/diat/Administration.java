@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -68,6 +69,7 @@ public class Administration extends AppCompatActivity {
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
     TextView shortnametextview;
+    ProgressDialog progressDialog;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -202,6 +204,12 @@ public class Administration extends AppCompatActivity {
                     Toast.makeText(Administration.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Proceed with uploading the file and saving the data
+                    // Initialize ProgressDialog
+                    progressDialog = new ProgressDialog(Administration.this);
+                    progressDialog.setMessage("Uploading file...");
+                    progressDialog.setCancelable(false); // Prevent dismissing by tapping outside the dialog
+                    progressDialog.show();
+
                     uploadFileToFirebase(fileUri, filename);
                     dialog.dismiss();
                 }
@@ -276,6 +284,8 @@ public class Administration extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // Get the download URL from the task snapshot
+                            // Dismiss progress dialog on successful upload
+                            progressDialog.dismiss();
                             fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
@@ -291,6 +301,7 @@ public class Administration extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
                             Toast.makeText(Administration.this, "Failed to upload file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });

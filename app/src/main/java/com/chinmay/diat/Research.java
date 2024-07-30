@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -72,6 +73,8 @@ public class Research extends AppCompatActivity {
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
     TextView shortnametextview;
+
+    ProgressDialog progressDialog;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -150,6 +153,12 @@ public class Research extends AppCompatActivity {
         // Fetch the username and display initials
         FirebaseUtils firebaseUtils = new FirebaseUtils();
         firebaseUtils.fetchAndDisplayInitials(shortnametextview);
+
+        // Fetch and display user name and email in the drawer header
+        View headerView = navigationView.getHeaderView(0);
+        TextView drawerUserName = headerView.findViewById(R.id.drawerUserName);
+        TextView drawerUserEmail = headerView.findViewById(R.id.drawerUserEmail);
+        firebaseUtils.fetchAndDisplayUserInfo(drawerUserName, drawerUserEmail);
     }
 
     private void fetchDocumentsFromFirestore() {
@@ -207,6 +216,13 @@ public class Research extends AppCompatActivity {
                     Toast.makeText(Research.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Proceed with uploading the file and saving the data
+
+                    // Initialize ProgressDialog
+                    progressDialog = new ProgressDialog(Research.this);
+                    progressDialog.setMessage("Uploading file...");
+                    progressDialog.setCancelable(false); // Prevent dismissing by tapping outside the dialog
+                    progressDialog.show();
+
                     uploadFileToFirebase(fileUri, filename);
                     dialog.dismiss();
                 }
@@ -279,7 +295,6 @@ public class Research extends AppCompatActivity {
         }
         return result;
     }
-
     private void uploadFileToFirebase(Uri fileUri, String filename) {
         if (fileUri != null) {
             StorageReference fileRef = storageReference.child("research/" + filename);
@@ -288,6 +303,8 @@ public class Research extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // Get the download URL from the task snapshot
+                            // Dismiss progress dialog on successful upload
+                            progressDialog.dismiss();
                             fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
@@ -295,7 +312,7 @@ public class Research extends AppCompatActivity {
                                     String downloadUrl = uri.toString();
                                     saveFileLinkToFirestore(filename, downloadUrl);
                                     // Here you can save the download URL to Firestore or perform other operations
-                                    Toast.makeText(Research.this, "File uploaded to storage", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "File uploaded to storage", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -303,7 +320,8 @@ public class Research extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Research.this, "Failed to upload file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Failed to upload file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }

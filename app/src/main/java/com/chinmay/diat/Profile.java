@@ -113,6 +113,13 @@ public class Profile extends AppCompatActivity {
             }
             return false;
         });
+
+        FirebaseUtils firebaseUtils = new FirebaseUtils();
+        // Fetch and display user name and email in the drawer header
+        View headerView = navigationView.getHeaderView(0);
+        TextView drawerUserName = headerView.findViewById(R.id.drawerUserName);
+        TextView drawerUserEmail = headerView.findViewById(R.id.drawerUserEmail);
+        firebaseUtils.fetchAndDisplayUserInfo(drawerUserName, drawerUserEmail);
     }
 
     // Method to fetch user data including profile image

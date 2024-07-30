@@ -3,6 +3,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,6 +50,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
     private TextView fileNameTextView;
     private EditText filenameedittext;
     private FileModel currentFileModel;
+    private ProgressDialog progressDialog;
 
     public FilesAdapter(Context context, List<FileModel> fileList) {
         this.context = context;
@@ -154,6 +156,10 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         Button saveButton = dialogLayout.findViewById(R.id.addDeptButton);
         fileNameTextView = dialogLayout.findViewById(R.id.fileNameTextView);
 
+        progressDialog = new ProgressDialog(view.getContext());
+        progressDialog.setMessage("Updating file...");
+        progressDialog.setCancelable(false); // Prevent dismissing by tapping outside the dialog
+
         // Set the current file name in the EditText
         filenameedittext.setText(fileModel.getFileName());
 
@@ -174,16 +180,15 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
                 if (fileUri == null) {
                     // Update only the file name
                     updateFileNameInFirebase(fileModel.getDepartmentId(), fileModel.getDocumentId(), filename);
+                    progressDialog.show();
                 } else {
                     // Proceed with updating the file and saving the data
                     updateFileInFirebase(fileUri, fileModel.getDepartmentId(), fileModel.getDocumentId(), filename);
+                    progressDialog.show();
                 }
                 dialog.dismiss();
             }
         });
-
-
-
         // Show the dialog
         dialog.show();
     }
@@ -256,16 +261,30 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
                                     .document(documentId)
                                     .update(fileData)
                                     .addOnSuccessListener(aVoid1 -> {
+                                        // Dismiss progress dialog on success
+                                        progressDialog.dismiss();
                                         Toast.makeText(context, "File updated successfully", Toast.LENGTH_SHORT).show();
                                         int position = fileList.indexOf(currentFileModel);
                                         currentFileModel.setFileName(newFileName);
                                         currentFileModel.setDownloadUrl(downloadUrl);
                                         notifyItemChanged(position);
                                     })
-                                    .addOnFailureListener(e -> Toast.makeText(context, "Failed to update file in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                    .addOnFailureListener(e -> {
+                                        // Dismiss progress dialog on failure
+                                        progressDialog.dismiss();
+                                        Toast.makeText(context, "Failed to update file in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
                         })
-                ).addOnFailureListener(e -> Toast.makeText(context, "Failed to upload new file: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-            }).addOnFailureListener(e -> Toast.makeText(context, "Failed to delete old file: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                ).addOnFailureListener(e -> {
+                        // Dismiss progress dialog on failure
+                        progressDialog.dismiss();
+                        Toast.makeText(context, "Failed to upload new file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }).addOnFailureListener(e -> {
+                // Dismiss progress dialog on failure
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed to delete old file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
         }
     }
 
@@ -288,6 +307,8 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
                                             .document(documentId)
                                             .update(fileData)
                                             .addOnSuccessListener(aVoid -> {
+                                                // Dismiss progress dialog on success
+                                                progressDialog.dismiss();
                                                 Toast.makeText(context, "Filename updated successfully", Toast.LENGTH_SHORT).show();
                                                 int position = fileList.indexOf(currentFileModel);
                                                 currentFileModel.setFileName(newFileName);
@@ -295,10 +316,22 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
                                                 notifyItemChanged(position);
                                                 oldFileRef.delete();
                                             })
-                                            .addOnFailureListener(e -> Toast.makeText(context, "Failed to update filename in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                            .addOnFailureListener(e -> {
+                                                // Dismiss progress dialog on success
+                                                progressDialog.dismiss();
+                                                Toast.makeText(context, "Failed to update filename in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            });
                                 }))
-                        .addOnFailureListener(e -> Toast.makeText(context, "Failed to upload file with new name: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-            }).addOnFailureListener(e -> Toast.makeText(context, "Failed to read old file: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        .addOnFailureListener(e -> {
+                            // Dismiss progress dialog on success
+                            progressDialog.dismiss();
+                            Toast.makeText(context, "Failed to upload file with new name: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            }).addOnFailureListener(e -> {
+                // Dismiss progress dialog on success
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed to read old file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
         }
     }
 

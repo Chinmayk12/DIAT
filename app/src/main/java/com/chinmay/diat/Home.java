@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -26,12 +25,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,6 +124,12 @@ public class Home extends AppCompatActivity {
         // Fetch the username and display initials
         FirebaseUtils firebaseUtils = new FirebaseUtils();
         firebaseUtils.fetchAndDisplayInitials(shortnametextview);
+
+        // Fetch and display user name and email in the drawer header
+        View headerView = navigationView.getHeaderView(0);
+        TextView drawerUserName = headerView.findViewById(R.id.drawerUserName);
+        TextView drawerUserEmail = headerView.findViewById(R.id.drawerUserEmail);
+        firebaseUtils.fetchAndDisplayUserInfo(drawerUserName, drawerUserEmail);
 
         // Check and request permissions if needed
         checkAndRequestPermissions();
