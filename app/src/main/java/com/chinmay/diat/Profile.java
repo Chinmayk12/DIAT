@@ -3,6 +3,8 @@ package com.chinmay.diat;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,12 +56,19 @@ public class Profile extends AppCompatActivity {
     ImageView profileImageView;
     Uri imageUri;
 
+    NetworkChangeReceiver networkChangeReceiver;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.profile);
+
+        // For Network Connectivity Checking
+        networkChangeReceiver = new NetworkChangeReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
 
         // Initialize Firebase
         db = FirebaseFirestore.getInstance();

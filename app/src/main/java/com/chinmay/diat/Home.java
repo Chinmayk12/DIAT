@@ -1,8 +1,10 @@
 package com.chinmay.diat;
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,12 +53,18 @@ public class Home extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
     private SharedPreferences sharedPreferences;
+    NetworkChangeReceiver networkChangeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.home);
+
+        // For Network Connectivity Checking
+        networkChangeReceiver = new NetworkChangeReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
 
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();

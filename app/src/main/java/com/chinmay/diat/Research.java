@@ -6,9 +6,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -73,8 +75,9 @@ public class Research extends AppCompatActivity {
     private List<FileModel> fileList;
     private EditText searchViewSearch; // Add this line
     TextView shortnametextview;
-
     ProgressDialog progressDialog;
+
+    NetworkChangeReceiver networkChangeReceiver;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -82,6 +85,11 @@ public class Research extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.administration);
+
+        // For Network Connectivity Checking
+        networkChangeReceiver = new NetworkChangeReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
 
         // Initialize Firebase Storage
         db = FirebaseFirestore.getInstance();
@@ -136,6 +144,7 @@ public class Research extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
+                startActivity(new Intent(Research.this, Home.class));
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             } else if (id == R.id.Achievements) {

@@ -276,9 +276,9 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
                                     });
                         })
                 ).addOnFailureListener(e -> {
-                        // Dismiss progress dialog on failure
-                        progressDialog.dismiss();
-                        Toast.makeText(context, "Failed to upload new file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // Dismiss progress dialog on failure
+                    progressDialog.dismiss();
+                    Toast.makeText(context, "Failed to upload new file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }).addOnFailureListener(e -> {
                 // Dismiss progress dialog on failure
@@ -406,7 +406,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
     private void deleteFile(View view, FileModel fileModel) {
         if (fileModel.getDocumentId() != null) {
             db.collection("documents")
-                    .document("administration")
+                    .document(fileModel.getDepartmentId())
                     .collection("files")
                     .document(fileModel.getDocumentId()) // Ensure documentId is not null
                     .delete()

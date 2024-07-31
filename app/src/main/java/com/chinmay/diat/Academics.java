@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +30,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,9 +44,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,13 +56,12 @@ public class Academics extends AppCompatActivity {
     private Uri fileUri;
     private TextView fileNameTextView;
     private EditText filenameedittext;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
     private FirebaseStorage storage;
     private FirebaseFirestore db;
     private StorageReference storageReference;
     private ImageView more_options;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
     private FloatingActionButton addfile;
 
     private RecyclerView recyclerView;
@@ -90,19 +84,19 @@ public class Academics extends AppCompatActivity {
         storageReference = storage.getReference();
 
         // Instances
+        recyclerView = findViewById(R.id.recyclerView);
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawerLayout);
-        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns in the grid
         fileList = new ArrayList<>();
         filesAdapter = new FilesAdapter(this, fileList);
         recyclerView.setAdapter(filesAdapter);
-        addfile = findViewById(R.id.floatingbutton);
         shortnametextview = (TextView)findViewById(R.id.shortnametextview);
-        searchViewSearch = findViewById(R.id.searchViewSearch);
+        addfile = findViewById(R.id.floatingbutton);
 
         // Fetch data from Firestore
         fetchDocumentsFromFirestore();
+
 
         addfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,10 +113,10 @@ public class Academics extends AppCompatActivity {
         });
 
         // Initialize search input field
+        searchViewSearch = findViewById(R.id.searchViewSearch);
         searchViewSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -130,8 +124,7 @@ public class Academics extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -154,12 +147,6 @@ public class Academics extends AppCompatActivity {
         // Fetch the username and display initials
         FirebaseUtils firebaseUtils = new FirebaseUtils();
         firebaseUtils.fetchAndDisplayInitials(shortnametextview);
-
-        // Fetch and display user name and email in the drawer header
-        View headerView = navigationView.getHeaderView(0);
-        TextView drawerUserName = headerView.findViewById(R.id.drawerUserName);
-        TextView drawerUserEmail = headerView.findViewById(R.id.drawerUserEmail);
-        firebaseUtils.fetchAndDisplayUserInfo(drawerUserName, drawerUserEmail);
     }
 
     private void fetchDocumentsFromFirestore() {
@@ -251,14 +238,6 @@ public class Academics extends AppCompatActivity {
     }
 
     @Override
-    /*protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        fileUri = data.getData();
-        String fileName = getFileName(fileUri);
-        fileNameTextView.setText(fileName);
-        filesAdapter.handleActivityResult(requestCode, resultCode, data);
-    }*/
-
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_FILE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
@@ -267,15 +246,16 @@ public class Academics extends AppCompatActivity {
             if (fileNameTextView != null) {
                 fileNameTextView.setText(fileName);
             } else {
-                Log.e("Administration", "fileNameTextView is null when handling result");
+                Log.e("Academics", "fileNameTextView is null when handling result");
                 // Handle this case based on your application logic
             }
             // Pass the result to FilesAdapter if needed
             filesAdapter.handleActivityResult(requestCode, resultCode, data);
         } else {
-            Log.e("Administration", "Failed to handle file picker result");
+            Log.e("Academics", "Failed to handle file picker result");
         }
     }
+
 
     @SuppressLint("Range")
     private String getFileName(Uri uri) {
@@ -313,7 +293,7 @@ public class Academics extends AppCompatActivity {
                                     String downloadUrl = uri.toString();
                                     saveFileLinkToFirestore(filename, downloadUrl);
                                     // Here you can save the download URL to Firestore or perform other operations
-                                    Toast.makeText(getApplicationContext(), "File uploaded to storage", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Academics.this, "File uploaded to storage", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -322,7 +302,7 @@ public class Academics extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Failed to upload file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Academics.this, "Failed to upload file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -333,7 +313,7 @@ public class Academics extends AppCompatActivity {
         fileData.put("fileName", fileName);
         fileData.put("downloadUrl", downloadUrl);
 
-        // Add the file link to the "files" subcollection under "administration"
+        // Add the file link to the "files" subcollection under "academics"
         db.collection("documents")
                 .document("academics")
                 .collection("files")

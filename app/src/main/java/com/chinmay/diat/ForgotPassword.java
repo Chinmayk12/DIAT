@@ -1,6 +1,8 @@
 package com.chinmay.diat;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,11 +25,18 @@ public class ForgotPassword extends AppCompatActivity {
     FirebaseAuth auth;
     AppCompatButton forgotpasswordbtn;
 
+    NetworkChangeReceiver networkChangeReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.forgot_password);
+
+        // For Network Connectivity Checking
+        networkChangeReceiver = new NetworkChangeReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
 
         forgotemail = findViewById(R.id.forgot_user_email);
         forgotpasswordbtn = findViewById(R.id.forgot_password_btn);

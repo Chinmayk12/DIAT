@@ -1,11 +1,14 @@
 package com.chinmay.diat;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +39,9 @@ public class Login extends AppCompatActivity {
     AppCompatButton loginbtn;
     CardView googlelogincard, facebooklogincard;
     String uid;
+    RelativeLayout guestLogin;
+
+    NetworkChangeReceiver networkChangeReceiver;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,9 +50,15 @@ public class Login extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.login);
 
+        // For Network Connectivity Checking
+        networkChangeReceiver = new NetworkChangeReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
+
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
+        guestLogin = findViewById(R.id.guest_login);
         loginbtn = findViewById(R.id.login_btn);
         googlelogincard = findViewById(R.id.googlelogincard);
         facebooklogincard = findViewById(R.id.facebooklogincard);
@@ -80,6 +92,15 @@ public class Login extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), Signup.class));
             }
         });
+
+        guestLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),Home.class));
+            }
+        });
+
+
     }
 
     public void emailLogin() {

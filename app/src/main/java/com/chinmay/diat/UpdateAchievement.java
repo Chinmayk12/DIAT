@@ -1,8 +1,10 @@
 package com.chinmay.diat;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,12 +43,18 @@ public class UpdateAchievement extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String achievementId;
     private List<String> oldImageUrls;
+    NetworkChangeReceiver networkChangeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.update_achievement);
+
+        // For Network Connectivity Checking
+        networkChangeReceiver = new NetworkChangeReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
 
         nameLayout = findViewById(R.id.update_achievement_name);
         descriptionLayout = findViewById(R.id.update_achievement_description);

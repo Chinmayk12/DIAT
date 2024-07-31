@@ -131,6 +131,7 @@ public class Faculty extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
+                startActivity(new Intent(Faculty.this, Home.class));
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             } else if (id == R.id.Achievements) {
