@@ -24,14 +24,16 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapter.AchievementViewHolder> {
+    private final boolean isLoggedIn;
     private Context context;
     private List<AchievementModel> achievementsList;
     FirebaseFirestore db;
     FirebaseStorage storage;
 
-    public AchievementsAdapter(Context context, List<AchievementModel> achievementsList) {
+    public AchievementsAdapter(Context context, List<AchievementModel> achievementsList, boolean isLoggedIn) {
         this.context = context;
         this.achievementsList = achievementsList;
+        this.isLoggedIn = isLoggedIn; // Add this field
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
     }
@@ -74,28 +76,25 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
             }
         });
 
-        holder.moreOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu popupMenu = new PopupMenu(context, view); // Use 'context' here
+        if (isLoggedIn) {
+            holder.moreOptions.setVisibility(View.VISIBLE);
+            holder.moreOptions.setOnClickListener(view -> {
+                PopupMenu popupMenu = new PopupMenu(context, view);
                 popupMenu.getMenuInflater().inflate(R.menu.achievement_menu, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        int id = menuItem.getItemId();
-                        if (id == R.id.achievement_update) {
-                            //Toast.makeText(context,"Update",Toast.LENGTH_SHORT).show();
-                            updateAchievement(achievementModel);
-
-                        } else if (id == R.id.achievement_delete) {
-                            showDeleteConfirmationDialog(achievementModel);
-                        }
-                        return true;
+                popupMenu.setOnMenuItemClickListener(menuItem -> {
+                    int id = menuItem.getItemId();
+                    if (id == R.id.achievement_update) {
+                        updateAchievement(achievementModel);
+                    } else if (id == R.id.achievement_delete) {
+                        showDeleteConfirmationDialog(achievementModel);
                     }
+                    return true;
                 });
                 popupMenu.show();
-            }
-        });
+            });
+        } else {
+            holder.moreOptions.setVisibility(View.GONE);
+        }
 
     }
 

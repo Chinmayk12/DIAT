@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
@@ -70,6 +71,7 @@ public class Academics extends AppCompatActivity {
     private EditText searchViewSearch; // Add this line
     TextView shortnametextview;
     ProgressDialog progressDialog;
+    private boolean isLoggedIn = false;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -89,7 +91,7 @@ public class Academics extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawerLayout);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns in the grid
         fileList = new ArrayList<>();
-        filesAdapter = new FilesAdapter(this, fileList);
+        filesAdapter = new FilesAdapter(this, fileList,false);
         recyclerView.setAdapter(filesAdapter);
         shortnametextview = (TextView)findViewById(R.id.shortnametextview);
         addfile = findViewById(R.id.floatingbutton);
@@ -144,9 +146,53 @@ public class Academics extends AppCompatActivity {
             return false;
         });
 
+        checkIfUserIsLoggedIn();
+
         // Fetch the username and display initials
         FirebaseUtils firebaseUtils = new FirebaseUtils();
         firebaseUtils.fetchAndDisplayInitials(shortnametextview);
+
+        // Fetch and display user name and email in the drawer header
+        View headerView = navigationView.getHeaderView(0);
+        TextView drawerUserName = headerView.findViewById(R.id.drawerUserName);
+        TextView drawerUserEmail = headerView.findViewById(R.id.drawerUserEmail);
+        firebaseUtils.fetchAndDisplayUserInfo(drawerUserName, drawerUserEmail);
+    }
+
+    private void checkIfUserIsLoggedIn() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            isLoggedIn = true;
+            //Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
+            updateUIForUserRole();
+        } else {
+            isLoggedIn = false;
+            //Toast.makeText(getApplicationContext(),"Not Logged In",Toast.LENGTH_SHORT).show();
+            updateUIForUserRole();
+        }
+    }
+
+    private void updateUIForUserRole() {
+        if (!isLoggedIn) {
+            addfile.setVisibility(View.GONE);
+            shortnametextview.setVisibility(View.GONE);
+            // Make the search bar occupy the full width
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            int marginInDp = 10; // for example
+            final float scale = getResources().getDisplayMetrics().density;
+            int marginInPx = (int) (marginInDp * scale + 0.5f);
+            params.setMargins(marginInPx, marginInPx, marginInPx, marginInPx); // left, top, right, bottom
+            searchViewSearch.setLayoutParams(params);
+
+            filesAdapter = new FilesAdapter(this, fileList, false); // Pass false to hide popup menu
+            recyclerView.setAdapter(filesAdapter);
+        } else {
+            filesAdapter = new FilesAdapter(this, fileList, true); // Pass true to show popup menu
+            recyclerView.setAdapter(filesAdapter);
+        }
     }
 
     private void fetchDocumentsFromFirestore() {

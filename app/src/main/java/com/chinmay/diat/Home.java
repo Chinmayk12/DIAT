@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
@@ -54,6 +55,7 @@ public class Home extends AppCompatActivity {
     private FirebaseUser currentUser;
     private SharedPreferences sharedPreferences;
     NetworkChangeReceiver networkChangeReceiver;
+    private boolean isLoggedIn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +143,44 @@ public class Home extends AppCompatActivity {
 
         // Check and request permissions if needed
         checkAndRequestPermissions();
+
+        checkIfUserIsLoggedIn();
+
+    }
+
+    private void checkIfUserIsLoggedIn() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            isLoggedIn = true;
+            //Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
+            updateUIForUserRole();
+        } else {
+            isLoggedIn = false;
+            //Toast.makeText(getApplicationContext(),"Not Logged In",Toast.LENGTH_SHORT).show();
+            updateUIForUserRole();
+        }
+    }
+
+
+    private void updateUIForUserRole() {
+        if (!isLoggedIn) {
+            // Hide the logout
+            navigationView.getMenu().findItem(R.id.logout).setVisible(false);
+
+            profile.setVisibility(View.GONE);
+            shortnametextview.setVisibility(View.GONE);
+
+            // Make the search bar occupy the full width and add margin
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            int marginInDp = 10; // Update this value as needed
+            final float scale = getResources().getDisplayMetrics().density;
+            int marginInPx = (int) (marginInDp * scale + 0.5f);
+            params.setMargins(marginInPx, marginInPx, marginInPx, marginInPx); // left, top, right, bottom
+            searchEditText.setLayoutParams(params);
+        }
     }
 
     private void addDepartment(String name, int iconResId) {

@@ -51,10 +51,12 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
     private EditText filenameedittext;
     private FileModel currentFileModel;
     private ProgressDialog progressDialog;
+    private boolean showPopupMenu;
 
-    public FilesAdapter(Context context, List<FileModel> fileList) {
+    public FilesAdapter(Context context, List<FileModel> fileList,boolean showPopupMenu) {
         this.context = context;
         this.fileList = fileList;
+        this.showPopupMenu = showPopupMenu;
         storage = FirebaseStorage.getInstance();
         db = FirebaseFirestore.getInstance();
     }
@@ -71,6 +73,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         FileModel fileModel = fileList.get(position);
         holder.fileName.setText(fileModel.getFileName());
         holder.folder.setImageResource(R.drawable.folder_icon);
+
         // Set click listener for folder icon to download the file
         holder.folder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,12 +83,17 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FileViewHold
         });
 
         // Set click listener for more options button to show the popup menu
-        holder.moreOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopupMenu(holder.moreOption, fileModel);
-            }
-        });
+        if (showPopupMenu) {
+            holder.moreOption.setVisibility(View.VISIBLE);
+            holder.moreOption.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopupMenu(holder.moreOption, fileModel);
+                }
+            });
+        } else {
+            holder.moreOption.setVisibility(View.GONE);
+        }
     }
 
     @Override

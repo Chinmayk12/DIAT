@@ -1,15 +1,19 @@
 package com.chinmay.diat;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -26,6 +30,8 @@ public class AllAchievements extends AppCompatActivity {
     private List<AchievementModel> filteredList;
     private FirebaseFirestore db;
     private EditText searchAchivement;
+    private Button addAchievementButton;
+    private boolean isLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,26 +39,33 @@ public class AllAchievements extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.all_achievements);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Check if the user is logged in
+        isLoggedIn = FirebaseAuth.getInstance().getCurrentUser() != null;
 
+        // Initialize views
+        recyclerView = findViewById(R.id.recyclerView);
+        searchAchivement = findViewById(R.id.searchAchivement);
+        addAchievementButton = findViewById(R.id.addAchivementbtn);
+
+        // Set up RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         achievementModelList = new ArrayList<>();
-        filteredList = new ArrayList<>(); // List to hold filtered achievements
-        achievementsAdapter = new AchievementsAdapter(this, filteredList);
+        filteredList = new ArrayList<>();
+        achievementsAdapter = new AchievementsAdapter(this, filteredList, isLoggedIn);
         recyclerView.setAdapter(achievementsAdapter);
 
+        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
+        // Load achievements from Firestore
         loadAchievements();
 
-        findViewById(R.id.addAchivementbtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddAchievements.class));
-            }
+        // Set button click listener
+        addAchievementButton.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), AddAchievements.class));
         });
 
-        searchAchivement = findViewById(R.id.searchAchivement);
+        // Set up search functionality
         searchAchivement.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -93,7 +106,6 @@ public class AllAchievements extends AppCompatActivity {
                     }
                 });
     }
-
     private void filterAchievements(String query) {
         filteredList.clear();
         if (query.isEmpty()) {
