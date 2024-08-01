@@ -189,6 +189,7 @@ public class Research extends AppCompatActivity {
 
     private void updateUIForUserRole() {
         if (!isLoggedIn) {
+            navigationView.getMenu().findItem(R.id.logout).setVisible(false);
             addfile.setVisibility(View.GONE);
             shortnametextview.setVisibility(View.GONE);
             // Make the search bar occupy the full width

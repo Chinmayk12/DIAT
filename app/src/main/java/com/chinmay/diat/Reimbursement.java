@@ -141,7 +141,8 @@ public class Reimbursement extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
-                startActivity(new Intent(Reimbursement.this, Home.class));
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finishAffinity();
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             } else if (id == R.id.Achievements) {
@@ -183,6 +184,7 @@ public class Reimbursement extends AppCompatActivity {
     }
     private void updateUIForUserRole() {
         if (!isLoggedIn) {
+            navigationView.getMenu().findItem(R.id.logout).setVisible(false);
             addfile.setVisibility(View.GONE);
             shortnametextview.setVisibility(View.GONE);
             // Make the search bar occupy the full width

@@ -109,6 +109,8 @@ public class Profile extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finishAffinity();
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             } else if (id == R.id.Achievements) {

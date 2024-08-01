@@ -9,10 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,6 +36,8 @@ public class AllAchievements extends AppCompatActivity {
     private EditText searchAchivement;
     private Button addAchievementButton;
     private boolean isLoggedIn;
+    NavigationView navigationView;
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,8 @@ public class AllAchievements extends AppCompatActivity {
         isLoggedIn = FirebaseAuth.getInstance().getCurrentUser() != null;
 
         // Initialize views
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigationView);
         recyclerView = findViewById(R.id.recyclerView);
         searchAchivement = findViewById(R.id.searchAchivement);
         addAchievementButton = findViewById(R.id.addAchivementbtn);
@@ -59,6 +67,8 @@ public class AllAchievements extends AppCompatActivity {
 
         // Load achievements from Firestore
         loadAchievements();
+
+        checkIfUserIsLoggedIn();
 
         // Set button click listener
         addAchievementButton.setOnClickListener(v -> {
@@ -83,6 +93,33 @@ public class AllAchievements extends AppCompatActivity {
                 // Not needed
             }
         });
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                startActivity(new Intent(AllAchievements.this, Home.class));
+                finishAffinity();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.Achievements) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.logout) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                logoutUser(navigationView);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void checkIfUserIsLoggedIn() {
+        if (!isLoggedIn){
+            navigationView.getMenu().findItem(R.id.logout).setVisible(false);
+            //Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
+        } else {
+            //Toast.makeText(getApplicationContext(),"Not Logged In",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadAchievements() {
@@ -105,6 +142,19 @@ public class AllAchievements extends AppCompatActivity {
                         achievementsAdapter.notifyDataSetChanged();
                     }
                 });
+    }
+
+    public void logoutUser(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Logout")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(AllAchievements.this, Login.class));
+                    finish();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
     private void filterAchievements(String query) {
         filteredList.clear();
