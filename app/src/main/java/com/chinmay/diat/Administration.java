@@ -2,7 +2,10 @@ package com.chinmay.diat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.widget.Toast;
 import android.app.AlertDialog;
+import android.widget.Toast;
+import android.widget.Toast;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;

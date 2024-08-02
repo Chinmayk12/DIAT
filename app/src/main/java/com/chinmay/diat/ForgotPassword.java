@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import com.google.android.gms.tasks.OnFailureListener;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;

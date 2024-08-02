@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.widget.Toast;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
