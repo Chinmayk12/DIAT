@@ -71,9 +71,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_below="@+id/ll1"
-            android:layout_above="@+id/addAchivementbtn"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:scrollbars="none"

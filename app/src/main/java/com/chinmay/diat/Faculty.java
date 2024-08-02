@@ -151,6 +151,7 @@ public class Faculty extends AppCompatActivity {
         });
 
         checkIfUserIsLoggedIn();
+
         // Fetch the username and display initials
         FirebaseUtils firebaseUtils = new FirebaseUtils();
         firebaseUtils.fetchAndDisplayInitials(shortnametextview);
@@ -165,7 +166,6 @@ public class Faculty extends AppCompatActivity {
     private void checkIfUserIsLoggedIn() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
-            navigationView.getMenu().findItem(R.id.logout).setVisible(false);
             isLoggedIn = true;
             //Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
             updateUIForUserRole();

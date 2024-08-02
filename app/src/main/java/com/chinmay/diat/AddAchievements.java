@@ -1,5 +1,6 @@
 package com.chinmay.diat;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,14 +8,19 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,8 +44,10 @@ public class AddAchievements extends AppCompatActivity {
     private TextInputLayout nameLayout, descriptionLayout;
     private FirebaseFirestore db;
     private FirebaseStorage storage;
-
     private ProgressDialog progressDialog;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,8 @@ public class AddAchievements extends AppCompatActivity {
 
         nameLayout = findViewById(R.id.achievement_name);
         descriptionLayout = findViewById(R.id.achievement_description);
+        navigationView = findViewById(R.id.navigationView);
+        drawerLayout = findViewById(R.id.drawerLayout);
 
         // Initialize Firestore and Firebase Storage
         db = FirebaseFirestore.getInstance();
@@ -106,8 +116,41 @@ public class AddAchievements extends AppCompatActivity {
             // Upload images to Firebase Storage and store in Firestore
             uploadImagesAndData(name, description);
         });
-    }
 
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finishAffinity();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.Achievements) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.logout) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                logoutUser(navigationView);
+                return true;
+            }
+            return false;
+        });
+    }
+    public void logoutUser(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to log out?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            // Sign out the current authenticated user from Firebase
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Login.class));
+            finishAffinity();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+            // User clicked No, do nothing
+            dialog.dismiss();
+        });
+        builder.create().show();
+    }
     private void selectMultipleImages() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("image/*");
@@ -206,5 +249,7 @@ public class AddAchievements extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Failed to compress image", Toast.LENGTH_SHORT).show();
             }
         }
+
+
     }
 }

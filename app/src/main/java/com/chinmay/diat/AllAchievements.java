@@ -11,6 +11,7 @@ import android.widget.EditText;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,7 +35,7 @@ public class AllAchievements extends AppCompatActivity {
     private List<AchievementModel> filteredList;
     private FirebaseFirestore db;
     private EditText searchAchivement;
-    private Button addAchievementButton;
+    private AppCompatButton addAchievementButton;
     private boolean isLoggedIn;
     NavigationView navigationView;
     DrawerLayout drawerLayout;
@@ -44,6 +45,9 @@ public class AllAchievements extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.all_achievements);
+
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
 
         // Check if the user is logged in
         isLoggedIn = FirebaseAuth.getInstance().getCurrentUser() != null;
@@ -62,8 +66,6 @@ public class AllAchievements extends AppCompatActivity {
         achievementsAdapter = new AchievementsAdapter(this, filteredList, isLoggedIn);
         recyclerView.setAdapter(achievementsAdapter);
 
-        // Initialize Firestore
-        db = FirebaseFirestore.getInstance();
 
         // Load achievements from Firestore
         loadAchievements();
@@ -116,6 +118,7 @@ public class AllAchievements extends AppCompatActivity {
     private void checkIfUserIsLoggedIn() {
         if (!isLoggedIn){
             navigationView.getMenu().findItem(R.id.logout).setVisible(false);
+            addAchievementButton.setVisibility(View.GONE);
             //Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
         } else {
             //Toast.makeText(getApplicationContext(),"Not Logged In",Toast.LENGTH_SHORT).show();

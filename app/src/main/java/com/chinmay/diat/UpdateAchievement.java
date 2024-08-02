@@ -1,4 +1,5 @@
 package com.chinmay.diat;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,14 +9,19 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -35,6 +41,10 @@ public class UpdateAchievement extends AppCompatActivity {
     private static final int MAX_IMAGES_TO_SELECT = 3;
     private List<Uri> selectedImageUris = new ArrayList<>();
     private ActivityResultLauncher<Intent> launcher;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    private boolean isLoggedIn = false;
+
 
     private TextInputLayout nameLayout, descriptionLayout;
     private FirebaseFirestore db;
@@ -56,6 +66,9 @@ public class UpdateAchievement extends AppCompatActivity {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceiver, filter);
 
+        // Instances
+        navigationView = findViewById(R.id.navigationView);
+        drawerLayout = findViewById(R.id.drawerLayout);
         nameLayout = findViewById(R.id.update_achievement_name);
         descriptionLayout = findViewById(R.id.update_achievement_description);
 
@@ -124,6 +137,37 @@ public class UpdateAchievement extends AppCompatActivity {
                 }
             }
         });
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finishAffinity();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.Achievements) {
+                //startActivity(new Intent(getApplicationContext(), AllAchievements.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            } else if (id == R.id.logout) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                logoutUser(navigationView);
+                return true;
+            }
+            return false;
+        });
+
+        checkIfUserIsLoggedIn();
+    }
+
+    private void checkIfUserIsLoggedIn() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            //Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
+        } else {
+            navigationView.getMenu().findItem(R.id.logout).setVisible(false);
+            //Toast.makeText(getApplicationContext(),"Not Logged In",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void selectMultipleImages() {
@@ -319,5 +363,22 @@ public class UpdateAchievement extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Failed to update achievement", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 });
+    }
+
+    public void logoutUser(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to log out?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            // Sign out the current authenticated user from Firebase
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Login.class));
+            finishAffinity();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+            // User clicked No, do nothing
+            dialog.dismiss();
+        });
+        builder.create().show();
     }
 }

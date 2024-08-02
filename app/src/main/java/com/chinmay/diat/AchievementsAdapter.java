@@ -158,7 +158,6 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
         TextView achievementName, achievementDescription;
         ImageView achievementImage;
         LinearLayout linearLayout;
-
         ImageButton moreOptions;
 
         public AchievementViewHolder(@NonNull View itemView) {
